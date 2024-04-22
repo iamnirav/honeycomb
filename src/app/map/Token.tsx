@@ -1,7 +1,11 @@
-import { Avatar } from '@nextui-org/react';
+import { Avatar } from '@nextui-org/react'
 
 export default function Token() {
   return (
-    <Avatar src="https://static.wikia.nocookie.net/fantasy-high/images/6/64/GorgugThistlespringJY.jpg/revision/latest?cb=20240106184413" />
-  );
+    <Avatar
+      isBordered
+      size="lg"
+      src="https://ih1.redbubble.net/image.1998870214.8699/st,small,507x507-pad,600x600,f8f8f8.jpg"
+    />
+  )
 }
