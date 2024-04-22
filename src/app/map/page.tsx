@@ -1,37 +1,27 @@
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
+import Token from '@/app/map/Token';
 
 export default function Map() {
+
+  const defaultNumRows = 8;
+  const defaultNumCols = 8;
+
+  const rows = [];
+  for (let i = 0; i < defaultNumRows; i++) {
+      const hexes = [];
+
+      for (let i = 0; i < defaultNumCols; i++) {
+        hexes.push(<div className="hex" key={i} />);
+      }
+
+      rows.push(<div className="hex-row" key={i}>{hexes}</div>);
+  }
+
   return (
-    <main>
-    <Card className="max-w-[400px]">
-      <CardHeader className="flex gap-3">
-        <Image
-          alt="nextui logo"
-          height={40}
-          radius="sm"
-          src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-          width={40}
-        />
-        <div className="flex flex-col">
-          <p className="text-md">NextUI</p>
-          <p className="text-small text-default-500">nextui.org</p>
-        </div>
-      </CardHeader>
-      <Divider/>
-      <CardBody>
-        <p>Make beautiful websites regardless of your design experience.</p>
-      </CardBody>
-      <Divider/>
-      <CardFooter>
-        <Link
-          isExternal
-          showAnchorIcon
-          href="https://github.com/nextui-org/nextui"
-        >
-          Visit source code on GitHub.
-        </Link>
-      </CardFooter>
-    </Card>
+    <main className="p-4">
+      <Token />
+      <div className="hex-grid flow-root">
+        {rows}
+      </div>
     </main>
   );
 }
