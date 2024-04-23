@@ -36,16 +36,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.HexFilled {
-  background-color: rgb(var(--hex-blank-rgb));
 
   &:before {
     content: ' ';
     width: 0;
     height: 0;
-    border-bottom: var(--hex-side) solid rgb(var(--hex-blank-rgb));
+    border-bottom: var(--hex-side) solid transparent;
     border-left: var(--hex-dim-long) solid transparent;
     border-right: var(--hex-dim-long) solid transparent;
     position: absolute;
@@ -57,9 +53,37 @@ body {
     width: 0;
     position: absolute;
     bottom: calc(-1 * var(--hex-side));
-    border-top: var(--hex-side) solid rgb(var(--hex-blank-rgb));
+    border-top: var(--hex-side) solid transparent;
     border-left: var(--hex-dim-long) solid transparent;
     border-right: var(--hex-dim-long) solid transparent;
+  }
+}
+
+.BackgroundLayer {
+  .Hex {
+    background-color: rgb(var(--hex-blank-rgb));
+
+    &:before {
+      border-bottom-color: rgb(var(--hex-blank-rgb));
+    }
+
+    &:after {
+      border-top-color: rgb(var(--hex-blank-rgb));
+    }
+  }
+}
+
+.TokenLayer {
+  .Hex.DropTarget {
+    background-color: rgba(255, 255, 255, 0.25);
+
+    &:before {
+      border-bottom-color: rgba(255, 255, 255, 0.25);
+    }
+
+    &:after {
+      border-top-color: rgba(255, 255, 255, 0.25);
+    }
   }
 }
 

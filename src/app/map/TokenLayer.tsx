@@ -15,10 +15,10 @@ export default function TokenLayer() {
   return (
     <DndContext>
       <Layer
-        classNameAll=""
+        className="TokenLayer"
         classNameMap={{}}
         contentsMap={contentsMap}
-        isDroppable={false}
+        isDroppable={true}
       />
     </DndContext>
   )

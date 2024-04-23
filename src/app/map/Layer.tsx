@@ -1,35 +1,38 @@
 import { ReactNode } from 'react'
 import Hex from '@/app/map/Hex'
+import clsx from 'clsx'
 
 type LayerProps = {
-  classNameAll: string
+  className?: string
   classNameMap: { [key: string]: string }
   contentsMap: { [key: string]: ReactNode }
   isDroppable?: boolean
 }
 
+const NUM_ROWS = 8
+const NUM_COLS = 8
+
 export default function Layer({
-  classNameAll,
+  className,
   classNameMap,
   contentsMap,
   isDroppable,
 }: LayerProps) {
-  const defaultNumRows = 8
-  const defaultNumCols = 8
   const rows = []
 
-  for (let y = 0; y < defaultNumRows; y++) {
+  for (let y = 0; y < NUM_ROWS; y++) {
     const hexes = []
 
-    for (let x = 0; x < defaultNumCols; x++) {
+    for (let x = 0; x < NUM_COLS; x++) {
+      const coords = `${x},${y}`
       hexes.push(
         <Hex
-          className={`${classNameAll} ${classNameMap[`${x},${y}`] || ''}`}
-          id={`${x},${y}`}
+          className={clsx(classNameMap[coords])}
           isDroppable={!!isDroppable}
-          key={x}
+          id={coords}
+          key={coords}
         >
-          {contentsMap[`${x},${y}`]}
+          {contentsMap[coords]}
         </Hex>
       )
     }
@@ -41,5 +44,9 @@ export default function Layer({
     )
   }
 
-  return <div className="Layer row-span-full col-span-full">{rows}</div>
+  return (
+    <div className={clsx('Layer row-span-full col-span-full', className)}>
+      {rows}
+    </div>
+  )
 }

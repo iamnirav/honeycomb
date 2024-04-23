@@ -14,18 +14,14 @@ export default function Hex({
   id,
   isDroppable,
 }: PropsWithChildren<HexProps>) {
-  const { isOver, setNodeRef } = useDroppable({ id })
+  const { isOver, setNodeRef } = useDroppable({ id, disabled: !isDroppable })
 
-  if (isDroppable) {
-    return (
-      <div
-        ref={setNodeRef}
-        className={clsx('Hex', className, { isOver: 'bg-red-600' })}
-      >
-        {children}
-      </div>
-    )
-  } else {
-    return <div className={`Hex ${className}`}>{children}</div>
-  }
+  return (
+    <div
+      ref={setNodeRef}
+      className={clsx('Hex', className, { DropTarget: isOver })}
+    >
+      {children}
+    </div>
+  )
 }
