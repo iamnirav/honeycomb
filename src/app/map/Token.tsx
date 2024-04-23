@@ -1,11 +1,21 @@
+import { useDraggable } from '@dnd-kit/core'
 import { Avatar } from '@nextui-org/react'
 
-export default function Token() {
+type TokenProps = {
+  src: string
+}
+
+export default function Token({ src } : TokenProps) {
+
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: src,
+  })
+
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+  } : undefined;
+
   return (
-    <Avatar
-      isBordered
-      size="lg"
-      src="https://ih1.redbubble.net/image.1998870214.8699/st,small,507x507-pad,600x600,f8f8f8.jpg"
-    />
+    <Avatar ref={setNodeRef} style={style} {...listeners} {...attributes} isBordered src={src} size="lg" />
   )
 }

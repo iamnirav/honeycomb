@@ -29,15 +29,22 @@ body {
   margin-top: var(--hex-side);
   width: calc(2 * var(--hex-dim-long));
   height: calc(2 * var(--hex-side));
-  background-color: rgb(var(--hex-blank-rgb));
   position: relative;
   float: left;
   margin-left: var(--hex-spacing);
   margin-bottom: var(--hex-spacing);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.HexFilled {
+  background-color: rgb(var(--hex-blank-rgb));
 
   &:before {
     content: " ";
-    width: 0; height: 0;
+    width: 0;
+    height: 0;
     border-bottom: var(--hex-side) solid rgb(var(--hex-blank-rgb));
     border-left: var(--hex-dim-long) solid transparent;
     border-right: var(--hex-dim-long) solid transparent;
@@ -56,7 +63,7 @@ body {
   }
 }
 
-.Layer {
+.GridLayer {
   padding-bottom: var(--hex-side);
 }
 
