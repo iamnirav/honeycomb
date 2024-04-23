@@ -17,7 +17,6 @@ export default function Map() {
           <TokenLayer />
         </TokenContext.Provider>
       </GridContainer>
-      
     </main>
   )
 }

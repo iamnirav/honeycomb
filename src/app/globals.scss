@@ -42,7 +42,7 @@ body {
   background-color: rgb(var(--hex-blank-rgb));
 
   &:before {
-    content: " ";
+    content: ' ';
     width: 0;
     height: 0;
     border-bottom: var(--hex-side) solid rgb(var(--hex-blank-rgb));
@@ -53,7 +53,7 @@ body {
   }
 
   &:after {
-    content: "";
+    content: '';
     width: 0;
     position: absolute;
     bottom: calc(-1 * var(--hex-side));
