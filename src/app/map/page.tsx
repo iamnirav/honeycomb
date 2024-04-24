@@ -1,9 +1,9 @@
 'use client'
 
-import { TokenProvider } from '@/app/map/TokenContext'
-import GridContainer from '@/app/map/GridContainer'
-import TokenLayer from '@/app/map/TokenLayer'
-import BackgroundLayer from '@/app/map/BackgroundLayer'
+import BackgroundLayer from '@/map/BackgroundLayer'
+import GridContainer from '@/map/GridContainer'
+import { TokenProvider } from '@/map/TokenContext'
+import TokenLayer from '@/map/TokenLayer'
 
 export default function Map() {
   return (

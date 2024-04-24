@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import { DndContext } from '@dnd-kit/core'
-import { TokenContext } from '@/app/map/TokenContext'
-import Layer from '@/app/map/Layer'
-import Token from '@/app/map/Token'
+import Layer from '@/map/Layer'
+import Token from '@/map/Token'
+import { TokenContext } from '@/map/TokenContext'
 
 export default function TokenLayer() {
   const { tokens, setTokens } = useContext(TokenContext)

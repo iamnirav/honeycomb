@@ -1,4 +1,4 @@
-import Layer from '@/app/map/Layer'
+import Layer from '@/map/Layer'
 
 export default function TokenLayer() {
   return (

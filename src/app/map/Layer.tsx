@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
-import Hex from '@/app/map/Hex'
 import clsx from 'clsx'
+import Hex from '@/map/Hex'
 
 type LayerProps = {
   className?: string
@@ -33,14 +33,14 @@ export default function Layer({
           key={coords}
         >
           {contentsMap[coords]}
-        </Hex>
+        </Hex>,
       )
     }
 
     rows.push(
       <div className="HexRow" key={y}>
         {hexes}
-      </div>
+      </div>,
     )
   }
 
