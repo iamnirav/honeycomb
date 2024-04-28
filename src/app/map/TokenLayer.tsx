@@ -5,7 +5,7 @@ import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
 
 export default function TokenLayer() {
-  const { tokens, setToken } = useContext(TokenContext)
+  const { tokens, updateToken } = useContext(TokenContext)
 
   const contentsMap = tokens.reduce(
     (acc: any, token: { x: number; y: number; img_url: string }) => {
@@ -29,7 +29,7 @@ export default function TokenLayer() {
           token.y === event.over.data.current.y,
       )
     ) {
-      setToken({
+      updateToken({
         ...event.active.data.current.token,
         x: event.over.data.current.x,
         y: event.over.data.current.y,
