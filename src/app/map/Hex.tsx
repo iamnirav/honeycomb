@@ -6,6 +6,8 @@ type HexProps = {
   className: string
   id: string
   isDroppable: boolean
+  x: number
+  y: number
 }
 
 export default function Hex({
@@ -13,8 +15,17 @@ export default function Hex({
   children,
   id,
   isDroppable,
+  x,
+  y,
 }: PropsWithChildren<HexProps>) {
-  const { isOver, setNodeRef } = useDroppable({ id, disabled: !isDroppable })
+  const { isOver, setNodeRef } = useDroppable({
+    id,
+    disabled: !isDroppable,
+    data: {
+      x,
+      y,
+    },
+  })
 
   return (
     <div

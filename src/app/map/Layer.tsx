@@ -31,6 +31,8 @@ export default function Layer({
           isDroppable={!!isDroppable}
           id={coords}
           key={coords}
+          x={x}
+          y={y}
         >
           {contentsMap[coords]}
         </Hex>,

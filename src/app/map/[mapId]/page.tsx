@@ -5,7 +5,11 @@ import GridContainer from '@/map/GridContainer'
 import { TokenProvider } from '@/map/TokenContext'
 import TokenLayer from '@/map/TokenLayer'
 
-export default function Map() {
+interface MapPageProps {
+  params: { mapId: string }
+}
+
+export default function MapPage({ params }: MapPageProps) {
   return (
     <main className="p-4">
       <GridContainer>
@@ -14,7 +18,7 @@ export default function Map() {
 
         {/* Token layer */}
 
-        <TokenProvider>
+        <TokenProvider mapId={params.mapId}>
           <TokenLayer />
         </TokenProvider>
       </GridContainer>

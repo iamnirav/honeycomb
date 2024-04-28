@@ -5,10 +5,13 @@ import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
 
 export default function TokenLayer() {
-  const { tokens, setTokens } = useContext(TokenContext)
+  const { tokens, setToken } = useContext(TokenContext)
 
-  const contentsMap = Object.entries(tokens).reduce((acc, [key, url]) => {
-    ;(acc as any)[key] = <Token src={url as any} coords={key} />
+  const contentsMap = tokens.reduce((acc, token) => {
+    const key = `${token.x},${token.y}`
+    ;(acc as any)[key] = (
+      <Token token={token} src={token.img_url as any} coords={key} />
+    )
     return acc
   }, {})
 
@@ -19,14 +22,17 @@ export default function TokenLayer() {
       event.over?.id &&
       event.active.data.current?.coords &&
       event.over.id !== event.active.data.current.coords &&
-      !tokens[event.over.id]
+      !tokens.some(
+        (token) =>
+          token.x === event.over.data.current.x &&
+          token.y === event.over.data.current.y,
+      )
     ) {
-      const newTokens = {
-        ...tokens,
-        [event.over.id]: event.active.id,
-      }
-      delete newTokens[event.active.data.current.coords]
-      setTokens(newTokens)
+      setToken({
+        ...event.active.data.current.token,
+        x: event.over.data.current.x,
+        y: event.over.data.current.y,
+      })
     }
   }
 

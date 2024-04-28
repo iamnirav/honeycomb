@@ -5,13 +5,14 @@ import { Avatar } from '@nextui-org/react'
 type TokenProps = {
   src: string
   coords: string
+  token: any
 }
 
-export default function Token({ src, coords }: TokenProps) {
+export default function Token({ src, coords, token }: TokenProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: src,
-      data: { coords },
+      data: { coords, token },
     })
 
   const style = isDragging
