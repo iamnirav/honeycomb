@@ -64,7 +64,9 @@ export function TokenProvider({
           if (!data.errors) {
             if (data.eventType === 'UPDATE') {
               const newTokens = [
-                ...tokens.filter((token) => token.id !== data.new.id),
+                ...tokens.filter(
+                  (token: { id: number }) => token.id !== data.new.id,
+                ),
                 data.new,
               ]
               setTokens(newTokens)
@@ -80,10 +82,10 @@ export function TokenProvider({
   }, [tokens])
 
   const memoizedTokens = useMemo(() => {
-    async function setToken(newToken) {
+    async function setToken(newToken: { id: number }) {
       // Update locally
       const newTokens = [
-        ...tokens.filter((token) => token.id !== newToken.id),
+        ...tokens.filter((token: { id: number }) => token.id !== newToken.id),
         newToken,
       ]
       setTokens(newTokens)
