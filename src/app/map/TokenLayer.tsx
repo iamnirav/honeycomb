@@ -1,5 +1,11 @@
 import { useContext } from 'react'
-import { DndContext } from '@dnd-kit/core'
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
 import Layer from '@/map/Layer'
 import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
@@ -8,9 +14,9 @@ export default function TokenLayer() {
   const { tokens, updateToken } = useContext(TokenContext)
 
   const contentsMap = tokens.reduce(
-    (acc: any, token: { x: number; y: number; img_url: string }) => {
+    (acc: any, token: { x: number; y: number; imgUrl: string }) => {
       const key = `${token.x},${token.y}`
-      acc[key] = <Token token={token} src={token.img_url as any} coords={key} />
+      acc[key] = <Token token={token} src={token.imgUrl as any} coords={key} />
       return acc
     },
     {},
@@ -37,8 +43,17 @@ export default function TokenLayer() {
     }
   }
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor),
+  )
+
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <Layer
         className="TokenLayer"
         classNameMap={{}}

@@ -7,6 +7,7 @@ import GridContainer from '@/map/GridContainer'
 import { TokenProvider } from '@/map/TokenContext'
 import TokenLayer from '@/map/TokenLayer'
 import TokenModal from '@/map/TokenModal'
+import AddTokenButton from '../AddTokenButton'
 
 interface MapPageProps {
   params: { mapUuid: string }
@@ -20,7 +21,7 @@ export default function MapPage({ params }: MapPageProps) {
           <Bench />
         </NavbarContent>
         <NavbarContent justify="end">
-          <TokenModal />
+          <AddTokenButton />
         </NavbarContent>
       </Navbar>
       <main className="p-4">

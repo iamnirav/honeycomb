@@ -10,7 +10,7 @@ export default function Bench() {
       {tokens
         .filter((token: any) => token.x === null || token.y === null)
         .map((token: any) => (
-          <Avatar key={token.id} isBordered src={token.img_url} />
+          <Avatar key={token.id} isBordered src={token.imgUrl} />
         ))}
     </AvatarGroup>
   )

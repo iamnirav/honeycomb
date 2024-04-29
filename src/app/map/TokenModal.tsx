@@ -11,41 +11,57 @@ import {
 } from '@nextui-org/react'
 import { TokenContext } from '@/map/TokenContext'
 
-export default function TokenModal() {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const [name, setName] = useState('')
-  const [imgUrl, setImgUrl] = useState('')
+interface TokenModalProps {
+  isOpen: boolean
+  onOpenChange: () => void
+  onClose: () => void
+  token?: { name: string; imgUrl: string }
+}
+
+export default function TokenModal({
+  isOpen,
+  onOpenChange,
+  onClose,
+  token,
+}: TokenModalProps) {
+  const [form, setForm] = useState(token || { name: '', imgUrl: '' })
 
   const { createToken } = useContext(TokenContext)
 
   function add() {
+    const { name, imgUrl } = form
     createToken({
       name,
-      img_url: imgUrl,
+      imgUrl,
     })
     onClose()
   }
 
   return (
-    <>
-      <Button onPress={onOpen}>Add Token</Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          <ModalHeader className="">Add Token</ModalHeader>
-          <ModalBody>
-            <Input label="Name" value={name} onValueChange={setName} />
-            <Input label="Image URL" value={imgUrl} onValueChange={setImgUrl} />
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" variant="light" onPress={onClose}>
-              Cancel
-            </Button>
-            <Button color="primary" onPress={add}>
-              Add
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <ModalContent>
+        <ModalHeader className="">Add Token</ModalHeader>
+        <ModalBody>
+          <Input
+            label="Name"
+            value={form.name}
+            onValueChange={(name) => setForm({ ...form, name })}
+          />
+          <Input
+            label="Image URL"
+            value={form.imgUrl}
+            onValueChange={(imgUrl) => setForm({ ...form, imgUrl })}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" variant="light" onPress={onClose}>
+            Cancel
+          </Button>
+          <Button color="primary" onPress={add}>
+            Add
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   )
 }

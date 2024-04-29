@@ -43,7 +43,7 @@ export function TokenProvider({
     async function fetchTokens() {
       const { data, error } = await db
         .from('maps')
-        .select('id, uuid, name, tokens (id, img_url, name, x, y)')
+        .select('id, uuid, name, tokens (id, imgUrl, name, x, y)')
         .filter('uuid', 'eq', mapUuid)
         .limit(1)
         .abortSignal(ac.signal)
@@ -68,7 +68,7 @@ export function TokenProvider({
     // Only subscribe once mapId has been fetched
     if (!mapId) return
 
-    const channel = db.channel('tokens_channel')
+    const channel = db.channel('tokens-channel')
     channel
       .on(
         'postgres_changes',
@@ -76,7 +76,7 @@ export function TokenProvider({
           event: '*',
           schema: 'public',
           table: 'tokens',
-          filter: `map_id=eq.${mapId}`,
+          filter: `mapId=eq.${mapId}`,
         },
         (data) => {
           if (!data.errors) {
@@ -87,6 +87,18 @@ export function TokenProvider({
                     (token: { id: number }) => token.id !== data.new.id,
                   ),
                   data.new,
+                ]
+              })
+            } else if (data.eventType === 'INSERT') {
+              const newTokens = setTokens((oldTokens: any[]) => {
+                return [...oldTokens, data.new]
+              })
+            } else if (data.eventType === 'DELETE') {
+              const newTokens = setTokens((oldTokens: any[]) => {
+                return [
+                  ...oldTokens.filter(
+                    (token: { id: number }) => token.id !== data.old.id,
+                  ),
                 ]
               })
             }
@@ -108,7 +120,7 @@ export function TokenProvider({
       setTokens(newTokens)
 
       // Update server
-      await db.from('tokens').insert({ ...newToken, map_id: mapId })
+      await db.from('tokens').insert({ ...newToken, mapId })
     }
     async function updateToken(updatedToken: { id: number }) {
       // Update locally

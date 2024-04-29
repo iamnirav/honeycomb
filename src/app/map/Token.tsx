@@ -1,6 +1,7 @@
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
-import { Avatar } from '@nextui-org/react'
+import { Avatar, useDisclosure } from '@nextui-org/react'
+import TokenModal from './TokenModal'
 
 type TokenProps = {
   src: string
@@ -15,19 +16,25 @@ export default function Token({ src, coords, token }: TokenProps) {
       data: { coords, token },
     })
 
+  const disclosure = useDisclosure()
+
   const style = isDragging
     ? { transform: CSS.Translate.toString(transform), zIndex: 1 }
     : {}
 
   return (
-    <Avatar
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      isBordered
-      src={src}
-      size="lg"
-    />
+    <>
+      <Avatar
+        ref={setNodeRef}
+        style={style}
+        {...listeners}
+        {...attributes}
+        isBordered
+        src={src}
+        size="lg"
+        onClick={disclosure.onOpen}
+      />
+      <TokenModal token={token} {...disclosure} />
+    </>
   )
 }
