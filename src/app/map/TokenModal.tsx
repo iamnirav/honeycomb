@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   Button,
   Input,
@@ -25,6 +25,12 @@ export default function TokenModal({
   token,
 }: TokenModalProps) {
   const [form, setForm] = useState(token || { name: '', imgUrl: '' })
+
+  useEffect(() => {
+    if (token) {
+      setForm(token)
+    }
+  }, [token])
 
   const { createToken, updateToken } = useContext(TokenContext)
 
