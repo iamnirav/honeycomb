@@ -26,14 +26,14 @@ export default function TokenModal({
 }: TokenModalProps) {
   const [form, setForm] = useState(token || { name: '', imgUrl: '' })
 
-  const { createToken } = useContext(TokenContext)
+  const { createToken, updateToken } = useContext(TokenContext)
 
-  function add() {
-    const { name, imgUrl } = form
-    createToken({
-      name,
-      imgUrl,
-    })
+  function save() {
+    if (!token) {
+      createToken({ ...form })
+    } else {
+      updateToken({ ...form })
+    }
     onClose()
   }
 
@@ -57,8 +57,8 @@ export default function TokenModal({
           <Button color="danger" variant="light" onPress={onClose}>
             Cancel
           </Button>
-          <Button color="primary" onPress={add}>
-            Add
+          <Button color="primary" onPress={save}>
+            Save
           </Button>
         </ModalFooter>
       </ModalContent>
