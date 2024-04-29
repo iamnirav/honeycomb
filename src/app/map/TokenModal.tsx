@@ -7,6 +7,9 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   useDisclosure,
 } from '@nextui-org/react'
 import { TokenContext } from '@/map/TokenContext'
@@ -30,23 +33,28 @@ export default function TokenModal({
     if (token) {
       setForm(token)
     }
-  }, [token])
+  }, [token, isOpen])
 
-  const { createToken, updateToken } = useContext(TokenContext)
+  const { insertToken, updateToken, deleteToken } = useContext(TokenContext)
 
   function save() {
     if (!token) {
-      createToken({ ...form })
+      insertToken({ ...form })
     } else {
       updateToken({ ...form })
     }
     onClose()
   }
 
+  function confirmDelete() {
+    onClose()
+    deleteToken(token)
+  }
+
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur">
       <ModalContent>
-        <ModalHeader className="">Add Token</ModalHeader>
+        <ModalHeader className="">{!!token ? 'Edit' : 'Add'} Token</ModalHeader>
         <ModalBody>
           <Input
             label="Name"
@@ -60,9 +68,24 @@ export default function TokenModal({
           />
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" variant="light" onPress={onClose}>
-            Cancel
-          </Button>
+          {!!token && (
+            <Popover placement="top-start" showArrow={false} backdrop="blur">
+              <PopoverTrigger>
+                <Button className="mr-auto" color="danger" variant="light">
+                  Delete&hellip;
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="p-2">
+                  <div className="mb-3 font-bold">Delete {form.name}?</div>
+                  <Button onPress={confirmDelete} color="danger">
+                    Delete Token
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
+          <Button onPress={onClose}>Cancel</Button>
           <Button color="primary" onPress={save}>
             Save
           </Button>

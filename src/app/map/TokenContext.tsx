@@ -8,11 +8,12 @@ import {
   useState,
 } from 'react'
 import db from '@/../db'
+import { deleteFn, insertFn, updateFn } from '@/../helpers'
 
 interface TokenContextType {
   tokens: any
   setTokens: Dispatch<SetStateAction<any | null>>
-  createToken: Function
+  insertToken: Function
   updateToken: Function
   deleteToken: Function
 }
@@ -20,7 +21,7 @@ interface TokenContextType {
 export const TokenContext = createContext<TokenContextType>({
   tokens: {},
   setTokens: (prevState: SetStateAction<any | null>) => prevState,
-  createToken: () => {},
+  insertToken: () => {},
   updateToken: () => {},
   deleteToken: () => {},
 })
@@ -80,27 +81,12 @@ export function TokenProvider({
         },
         (data) => {
           if (!data.errors) {
-            if (data.eventType === 'UPDATE') {
-              const newTokens = setTokens((oldTokens: any[]) => {
-                return [
-                  ...oldTokens.filter(
-                    (token: { id: number }) => token.id !== data.new.id,
-                  ),
-                  data.new,
-                ]
-              })
-            } else if (data.eventType === 'INSERT') {
-              const newTokens = setTokens((oldTokens: any[]) => {
-                return [...oldTokens, data.new]
-              })
-            } else if (data.eventType === 'DELETE') {
-              const newTokens = setTokens((oldTokens: any[]) => {
-                return [
-                  ...oldTokens.filter(
-                    (token: { id: number }) => token.id !== data.old.id,
-                  ),
-                ]
-              })
+            if (data.eventType === 'INSERT') {
+              setTokens(insertFn(data.new))
+            } else if (data.eventType === 'UPDATE' && data.new.id) {
+              setTokens(updateFn(data.new as { id: number }))
+            } else if (data.eventType === 'DELETE' && data.old.id) {
+              setTokens(deleteFn(data.old as { id: number }))
             }
           }
         },
@@ -114,30 +100,31 @@ export function TokenProvider({
 
   // Memoize context functions object for the rest of the app to use
   const memoizedTokens = useMemo(() => {
-    async function createToken(newToken: {}) {
-      // Update locally
-      const newTokens = [...tokens, newToken]
-      setTokens(newTokens)
+    // TODO would this result in temporary duplicates?
+    // The version coming back from the server isn't de-duped with the locally created version
+    async function insertToken(token: {}) {
+      // Create locally
+      setTokens(insertFn(token))
 
-      // Update server
-      await db.from('tokens').insert({ ...newToken, mapId })
+      // Create on server
+      await db.from('tokens').insert({ ...token, mapId })
     }
-    async function updateToken(updatedToken: { id: number }) {
+    async function updateToken(token: { id: number }) {
       // Update locally
-      const newTokens = [
-        ...tokens.filter(
-          (token: { id: number }) => token.id !== updatedToken.id,
-        ),
-        updatedToken,
-      ]
-      setTokens(newTokens)
+      setTokens(updateFn(token))
 
-      // Update server
-      await db.from('tokens').update(updatedToken).eq('id', updatedToken.id)
+      // Update on server
+      await db.from('tokens').update(token).eq('id', token.id)
     }
 
-    function deleteToken() {}
-    return { tokens, setTokens, createToken, updateToken, deleteToken }
+    async function deleteToken(token: { id: number }) {
+      // Delete locally
+      setTokens(deleteFn(token))
+
+      // Delete on server
+      await db.from('tokens').delete().eq('id', token.id)
+    }
+    return { tokens, setTokens, insertToken, updateToken, deleteToken }
   }, [tokens, setTokens, mapId])
 
   return (
