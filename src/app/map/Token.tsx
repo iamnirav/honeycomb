@@ -4,16 +4,15 @@ import { Avatar, useDisclosure } from '@nextui-org/react'
 import TokenModal from './TokenModal'
 
 type TokenProps = {
-  src: string
-  coords: string
-  token: any
+  token: { id?: number; imgUrl: string; name: string }
+  size?: 'sm' | 'md' | 'lg'
 }
 
-export default function Token({ src, coords, token }: TokenProps) {
+export default function Token({ token, size = 'lg' }: TokenProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
-      id: src,
-      data: { coords, token },
+      id: token.id || token.imgUrl,
+      data: { token },
     })
 
   const disclosure = useDisclosure()
@@ -30,9 +29,10 @@ export default function Token({ src, coords, token }: TokenProps) {
         {...listeners}
         {...attributes}
         isBordered
-        src={src}
-        size="lg"
+        src={token.imgUrl}
+        size={size}
         onClick={disclosure.onOpen}
+        name={token.name}
       />
       <TokenModal token={token} {...disclosure} />
     </>

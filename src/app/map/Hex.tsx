@@ -3,28 +3,21 @@ import { useDroppable } from '@dnd-kit/core'
 import clsx from 'clsx'
 
 type HexProps = {
-  className: string
-  id: string
+  className?: string
   isDroppable: boolean
-  x: number
-  y: number
+  coords: { x: number; y: number }
 }
 
 export default function Hex({
   className,
   children,
-  id,
   isDroppable,
-  x,
-  y,
+  coords,
 }: PropsWithChildren<HexProps>) {
   const { isOver, setNodeRef } = useDroppable({
-    id,
+    id: JSON.stringify(coords),
     disabled: !isDroppable,
-    data: {
-      x,
-      y,
-    },
+    data: { coords },
   })
 
   return (

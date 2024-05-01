@@ -18,7 +18,7 @@ interface TokenModalProps {
   isOpen: boolean
   onOpenChange: () => void
   onClose: () => void
-  token?: { name: string; imgUrl: string }
+  token?: { name?: string; imgUrl?: string }
 }
 
 export default function TokenModal({
@@ -27,7 +27,9 @@ export default function TokenModal({
   onClose,
   token,
 }: TokenModalProps) {
-  const [form, setForm] = useState(token || { name: '', imgUrl: '' })
+  const [form, setForm] = useState(
+    token || { name: '', imgUrl: '', x: null, y: null },
+  )
 
   useEffect(() => {
     if (token) {

@@ -3,10 +3,10 @@
 import { Navbar, NavbarContent } from '@nextui-org/react'
 import BackgroundLayer from '@/map/BackgroundLayer'
 import Bench from '@/map/Bench'
+import DndProvider from '@/map/DndProvider'
 import GridContainer from '@/map/GridContainer'
 import { TokenProvider } from '@/map/TokenContext'
 import TokenLayer from '@/map/TokenLayer'
-import TokenModal from '@/map/TokenModal'
 import AddTokenButton from '../AddTokenButton'
 
 interface MapPageProps {
@@ -16,24 +16,26 @@ interface MapPageProps {
 export default function MapPage({ params }: MapPageProps) {
   return (
     <TokenProvider mapUuid={params.mapUuid}>
-      <Navbar>
-        <NavbarContent>
-          <Bench />
-        </NavbarContent>
-        <NavbarContent justify="end">
-          <AddTokenButton />
-        </NavbarContent>
-      </Navbar>
-      <main className="p-4">
-        <GridContainer>
-          {/* Background layer */}
-          <BackgroundLayer />
+      <DndProvider>
+        <Navbar>
+          <NavbarContent>
+            <Bench />
+          </NavbarContent>
+          <NavbarContent justify="end">
+            <AddTokenButton />
+          </NavbarContent>
+        </Navbar>
+        <main className="p-4">
+          <GridContainer>
+            {/* Background layer */}
+            <BackgroundLayer />
 
-          {/* Token layer */}
+            {/* Token layer */}
 
-          <TokenLayer />
-        </GridContainer>
-      </main>
+            <TokenLayer />
+          </GridContainer>
+        </main>
+      </DndProvider>
     </TokenProvider>
   )
 }

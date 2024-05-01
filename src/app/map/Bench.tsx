@@ -1,17 +1,21 @@
 import { useContext } from 'react'
-import { Avatar, AvatarGroup } from '@nextui-org/react'
+import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
 
 export default function Bench() {
   const { tokens } = useContext(TokenContext)
 
   return (
-    <AvatarGroup>
+    <div className="inline-flex">
       {tokens
         .filter((token: any) => token.x === null || token.y === null)
         .map((token: any) => (
-          <Avatar key={token.id} isBordered src={token.imgUrl} />
+          <Token
+            key={token.id || token.name || token.imgUrl}
+            size="sm"
+            token={token}
+          />
         ))}
-    </AvatarGroup>
+    </div>
   )
 }
