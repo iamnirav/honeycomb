@@ -65,6 +65,7 @@ export function TokenProvider({
   }, [mapUuid])
 
   // Subscribe to token updates
+  // TODO change to using supabase broadcast for live updates to ease load on db
   useEffect(() => {
     // Only subscribe once mapId has been fetched
     if (!mapId) return

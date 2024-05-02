@@ -2,7 +2,7 @@
 
 export function insertFn(insertItem: any) {
   return (items: any[]) => {
-    return [...items, insertItem]
+    return [...items.filter((item: { id: number }) => item.id), insertItem]
   }
 }
 

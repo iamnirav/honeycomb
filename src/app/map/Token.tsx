@@ -18,7 +18,7 @@ export default function Token({ token, size = 'lg' }: TokenProps) {
   const disclosure = useDisclosure()
 
   const style = isDragging
-    ? { transform: CSS.Translate.toString(transform), zIndex: 1 }
+    ? { transform: CSS.Translate.toString(transform), zIndex: 50 }
     : {}
 
   return (

@@ -14,20 +14,22 @@ export default function DndProvider({ children }: PropsWithChildren) {
   // Could be improved by implementing a typesafe wrapper around dndkit
   // e.g., https://github.com/clauderic/dnd-kit/issues/935
   function handleDragEnd(event: any) {
-    if (
-      event.over?.data?.current?.coords &&
-      // For every token, check that at least one of x/y is not equal to the drop target's x/y
-      tokens.every(
-        (token: { x: number; y: number }) =>
-          token.x !== event.over.data.current.coords.x ||
-          token.y !== event.over.data.current.coords.y,
-      )
-    ) {
-      updateToken({
-        ...event.active.data.current.token,
-        x: event.over.data.current.coords.x,
-        y: event.over.data.current.coords.y,
-      })
+    if (event.over?.data?.current?.coords) {
+      const { x, y } = event.over.data.current.coords
+      if (
+        // If both coordinates are null, we're adding to the bench
+        (x === null && y === null) ||
+        // Otherwise, for every token, check that at least one of x/y is not equal to the drop target's x/y
+        tokens.every(
+          (token: { x: number; y: number }) => token.x !== x || token.y !== y,
+        )
+      ) {
+        updateToken({
+          ...event.active.data.current.token,
+          x,
+          y,
+        })
+      }
     }
   }
 
