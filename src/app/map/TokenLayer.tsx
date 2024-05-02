@@ -7,8 +7,6 @@ import { DEFAULT_NUM_COLS, DEFAULT_NUM_ROWS } from '../../constants'
 export default function TokenLayer() {
   const { tokens } = useContext(TokenContext)
 
-  console.log(tokens)
-
   const contentsMap: ReactNode[][] = tokens.reduce(
     (
       acc: ReactNode[][],
