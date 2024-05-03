@@ -21,9 +21,6 @@ export default function MapPage({ params }: MapPageProps) {
           <NavbarContent>
             <Bench />
           </NavbarContent>
-          <NavbarContent justify="end">
-            <AddTokenButton />
-          </NavbarContent>
         </Navbar>
         <main className="p-4 pb-8">
           <GridContainer>
