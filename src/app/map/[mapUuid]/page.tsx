@@ -7,7 +7,6 @@ import DndProvider from '@/map/DndProvider'
 import GridContainer from '@/map/GridContainer'
 import { TokenProvider } from '@/map/TokenContext'
 import TokenLayer from '@/map/TokenLayer'
-import AddTokenButton from '../AddTokenButton'
 
 interface MapPageProps {
   params: { mapUuid: string }
