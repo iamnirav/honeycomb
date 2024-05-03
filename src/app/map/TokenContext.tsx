@@ -10,20 +10,30 @@ import {
 import db from '@/../db'
 import { deleteFn, insertFn, updateFn } from '@/../helpers'
 
+interface NewTokenType {
+  name: string
+  ring: number | null
+  x: number | null
+  y: number | null
+  imgUrl: string
+}
+
 interface TokenContextType {
   tokens: any
-  setTokens: Dispatch<SetStateAction<any | null>>
   insertToken: Function
   updateToken: Function
   deleteToken: Function
+  newToken: NewTokenType
+  setNewTokenCoords: Function
 }
 
 export const TokenContext = createContext<TokenContextType>({
   tokens: {},
-  setTokens: (prevState: SetStateAction<any | null>) => prevState,
   insertToken: () => {},
   updateToken: () => {},
   deleteToken: () => {},
+  newToken: { x: null, y: null, name: '', ring: null, imgUrl: '' },
+  setNewTokenCoords: () => {},
 })
 
 export function TokenProvider({
@@ -34,6 +44,13 @@ export function TokenProvider({
   // https://supabase.com/docs/guides/api/rest/generating-types
   const [tokens, setTokens] = useState([] as any)
   const [mapId, setMapId] = useState(undefined)
+  const [newToken, setNewToken] = useState<NewTokenType>({
+    x: null,
+    y: null,
+    name: '',
+    ring: null,
+    imgUrl: '',
+  })
 
   // Initial load of map and tokens
   useEffect(() => {
@@ -125,8 +142,20 @@ export function TokenProvider({
       // Delete on server
       await db.from('tokens').delete().eq('id', token.id)
     }
-    return { tokens, setTokens, insertToken, updateToken, deleteToken }
-  }, [tokens, setTokens, mapId])
+
+    function setNewTokenCoords(x: number, y: number) {
+      setNewToken({ ...newToken, x, y })
+    }
+
+    return {
+      tokens,
+      insertToken,
+      updateToken,
+      deleteToken,
+      newToken,
+      setNewTokenCoords,
+    }
+  }, [tokens, setTokens, newToken, setNewToken, mapId])
 
   return (
     <TokenContext.Provider value={memoizedTokens}>

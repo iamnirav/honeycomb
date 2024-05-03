@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
-import AddTokenButton from './AddTokenButton'
 
 export default function Bench() {
   const { tokens } = useContext(TokenContext)
@@ -31,7 +30,7 @@ export default function Bench() {
             token={token}
           />
         ))}
-      <AddTokenButton />
+      <Token size="sm" className="ml-4" />
     </div>
   )
 }

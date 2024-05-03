@@ -9,7 +9,7 @@ import {
 import { TokenContext } from '@/map/TokenContext'
 
 export default function DndProvider({ children }: PropsWithChildren) {
-  const { tokens, updateToken } = useContext(TokenContext)
+  const { tokens, updateToken, setNewTokenCoords } = useContext(TokenContext)
 
   // Could be improved by implementing a typesafe wrapper around dndkit
   // e.g., https://github.com/clauderic/dnd-kit/issues/935
@@ -24,11 +24,17 @@ export default function DndProvider({ children }: PropsWithChildren) {
           (token: { x: number; y: number }) => token.x !== x || token.y !== y,
         )
       ) {
-        updateToken({
-          ...event.active.data.current.token,
-          x,
-          y,
-        })
+        // If the draggable has no token object, we'll be opening the form to add a new one, so just populate coordinates
+        if (!event.active.data.current.token) {
+          setNewTokenCoords(x, y)
+          event.active.data.current.callback()
+        } else {
+          updateToken({
+            ...event.active.data.current.token,
+            x,
+            y,
+          })
+        }
       }
     }
   }

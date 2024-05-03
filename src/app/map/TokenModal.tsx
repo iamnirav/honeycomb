@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@nextui-org/react'
+import clsx from 'clsx'
 import { COLOR_CODES, getColor, isOnlyEmoji, shortenName } from '@/../helpers'
 import { TokenContext } from '@/map/TokenContext'
 
@@ -28,17 +29,14 @@ export default function TokenModal({
   onClose,
   token,
 }: TokenModalProps) {
-  const [form, setForm] = useState(
-    token || { name: '', imgUrl: '', x: null, y: null, ring: null },
-  )
+  const { insertToken, updateToken, deleteToken, newToken } =
+    useContext(TokenContext)
+
+  const [form, setForm] = useState(token || newToken)
 
   useEffect(() => {
-    if (token) {
-      setForm(token)
-    }
-  }, [token, isOpen])
-
-  const { insertToken, updateToken, deleteToken } = useContext(TokenContext)
+    setForm(token || newToken)
+  }, [token, newToken, isOpen])
 
   function save() {
     if (!token) {
@@ -81,11 +79,13 @@ export default function TokenModal({
                   onClick={() => setForm({ ...form, ring: code })}
                   name={form.name}
                   getInitials={shortenName}
-                  className={
-                    form.name && isOnlyEmoji(form.name.split(' ')[0])
-                      ? 'text-2xl'
-                      : ''
-                  }
+                  className={clsx(
+                    {
+                      'text-2xl':
+                        form.name && isOnlyEmoji(form.name.split(' ')[0]),
+                    },
+                    'cursor-pointer',
+                  )}
                 />
               )
             })}
