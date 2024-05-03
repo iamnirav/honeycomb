@@ -44,7 +44,7 @@ export function TokenProvider({
     async function fetchTokens() {
       const { data, error } = await db
         .from('maps')
-        .select('id, uuid, name, tokens (id, imgUrl, name, x, y)')
+        .select('id, uuid, name, tokens (id, imgUrl, name, x, y, ring)')
         .filter('uuid', 'eq', mapUuid)
         .limit(1)
         .abortSignal(ac.signal)

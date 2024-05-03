@@ -36,3 +36,28 @@ export function shortenName(str: string) {
     return acc + word[0]
   }, '')
 }
+
+interface NextUiColors {
+  [key: number]:
+    | 'default'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'danger'
+}
+
+export const COLORS: NextUiColors = {
+  0: 'default',
+  1: 'primary',
+  2: 'secondary',
+  3: 'success',
+  4: 'warning',
+  5: 'danger',
+}
+
+export const COLOR_CODES: number[] = [0, 1, 2, 3, 4, 5]
+
+export function getColor(code: number = 0) {
+  return COLORS[code]
+}

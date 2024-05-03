@@ -25,13 +25,12 @@ export default function MapPage({ params }: MapPageProps) {
             <AddTokenButton />
           </NavbarContent>
         </Navbar>
-        <main className="p-4">
+        <main className="p-4 pb-8">
           <GridContainer>
             {/* Background layer */}
             <BackgroundLayer />
 
             {/* Token layer */}
-
             <TokenLayer />
           </GridContainer>
         </main>

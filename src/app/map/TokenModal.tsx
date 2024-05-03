@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import {
+  Avatar,
   Button,
   Input,
   Modal,
@@ -10,15 +11,15 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  useDisclosure,
 } from '@nextui-org/react'
+import { COLOR_CODES, getColor, isOnlyEmoji, shortenName } from '@/../helpers'
 import { TokenContext } from '@/map/TokenContext'
 
 interface TokenModalProps {
   isOpen: boolean
   onOpenChange: () => void
   onClose: () => void
-  token?: { name?: string; imgUrl?: string }
+  token?: { name?: string; imgUrl?: string; ring?: number }
 }
 
 export default function TokenModal({
@@ -28,7 +29,7 @@ export default function TokenModal({
   token,
 }: TokenModalProps) {
   const [form, setForm] = useState(
-    token || { name: '', imgUrl: '', x: null, y: null },
+    token || { name: '', imgUrl: '', x: null, y: null, ring: null },
   )
 
   useEffect(() => {
@@ -68,6 +69,27 @@ export default function TokenModal({
             value={form.imgUrl}
             onValueChange={(imgUrl) => setForm({ ...form, imgUrl })}
           />
+          <div className="flex gap-4 my-4 items-center justify-center">
+            {COLOR_CODES.map((code) => {
+              return (
+                <Avatar
+                  isBordered
+                  isDisabled={form.ring !== code && !(!code && !form.ring)}
+                  color={getColor(code)}
+                  src={form.imgUrl}
+                  key={code}
+                  onClick={() => setForm({ ...form, ring: code })}
+                  name={form.name}
+                  getInitials={shortenName}
+                  className={
+                    form.name && isOnlyEmoji(form.name.split(' ')[0])
+                      ? 'text-2xl'
+                      : ''
+                  }
+                />
+              )
+            })}
+          </div>
         </ModalBody>
         <ModalFooter>
           {!!token && (
