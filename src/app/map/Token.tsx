@@ -23,19 +23,14 @@ export default function Token({ token, size = 'lg', className }: TokenProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: token?.id || 'new-token-button',
-      data: {
-        token,
-        callback: () => {
-          disclosure.onOpen()
-        },
-      },
+      data: token ? { token } : { callback: disclosure.onOpen },
     })
 
   const style = isDragging
     ? { transform: CSS.Translate.toString(transform), zIndex: 50 }
     : {}
 
-  const avatarProps = !!token
+  const avatarProps = token
     ? {
         className: clsx(
           isOnlyEmoji(token.name.split(' ')[0]) ? SIZES[size] : '',

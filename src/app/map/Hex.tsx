@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 import clsx from 'clsx'
+import { hexAdjacent } from '@/../helpers'
 
 type HexProps = {
   className?: string

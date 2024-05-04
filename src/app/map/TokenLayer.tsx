@@ -1,11 +1,28 @@
-import { ReactNode, useContext } from 'react'
+import { ReactNode, useContext, useState } from 'react'
+import { useDndMonitor } from '@dnd-kit/core'
 import Layer from '@/map/Layer'
 import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
-import { DEFAULT_NUM_COLS, DEFAULT_NUM_ROWS } from '../../constants'
 
 export default function TokenLayer() {
   const { tokens } = useContext(TokenContext)
+  const [dragSourceHex, setDragSourceHex] = useState<{
+    x?: number
+    y?: number
+  }>({})
+
+  useDndMonitor({
+    onDragStart(event) {
+      const { x, y } = event.active.data.current?.token
+      setDragSourceHex({ x, y })
+    },
+    onDragEnd() {
+      setDragSourceHex({})
+    },
+    onDragCancel() {
+      setDragSourceHex({})
+    },
+  })
 
   const contentsMap: ReactNode[][] = tokens.reduce(
     (
@@ -13,20 +30,26 @@ export default function TokenLayer() {
       token: { x: number; y: number; imgUrl: string; name: string },
     ) => {
       if (token.x !== null && token.y !== null) {
+        if (!acc[token.x]) acc[token.x] = []
         acc[token.x][token.y] = <Token token={token} />
       }
 
       return acc
     },
-    Array.from({ length: DEFAULT_NUM_COLS }, () =>
-      Array(DEFAULT_NUM_ROWS).fill(undefined),
-    ),
+    [],
   )
+
+  const classNameMap: string[][] = []
+  if (dragSourceHex.x && dragSourceHex.y) {
+    if (!classNameMap[dragSourceHex.x]) classNameMap[dragSourceHex.x] = []
+    classNameMap[dragSourceHex.x][dragSourceHex.y] = 'DragSource'
+  }
 
   return (
     <Layer
       className="TokenLayer"
       contentsMap={contentsMap}
+      classNameMap={classNameMap}
       isDroppable={true}
     />
   )

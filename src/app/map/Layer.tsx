@@ -1,29 +1,41 @@
 import { ReactNode } from 'react'
 import clsx from 'clsx'
 import Hex from '@/map/Hex'
-import { DEFAULT_NUM_COLS, DEFAULT_NUM_ROWS } from '../../constants'
+import { DEFAULT_MAX_X, DEFAULT_MAX_Y } from '../../constants'
 
 type LayerProps = {
   className?: string
   contentsMap?: ReactNode[][]
+  classNameMap?: string[][]
   isDroppable?: boolean
 }
 
 export default function Layer({
   className,
-  contentsMap,
+  contentsMap = [],
+  classNameMap = [],
   isDroppable = false,
 }: LayerProps) {
   const rows = []
 
-  for (let y = 0; y < DEFAULT_NUM_ROWS; y++) {
+  for (let y = 0; y < DEFAULT_MAX_Y; y++) {
     const hexes = []
 
-    for (let x = 0; x < DEFAULT_NUM_COLS; x++) {
-      const coords = `${x},${y}`
+    // Using doubled/interlaced coordinates for ease of rendering
+    // https://www.redblobgames.com/grids/hexagons/#coordinates-doubled
+    for (
+      let x = y & 1 ? 1 : 0; // if y is odd, start at 1; if y is even, start at 0
+      x < DEFAULT_MAX_X;
+      x = x + 2
+    ) {
       hexes.push(
-        <Hex isDroppable={isDroppable} key={x} coords={{ x, y }}>
-          {contentsMap && contentsMap[x][y]}
+        <Hex
+          isDroppable={isDroppable}
+          key={x}
+          coords={{ x, y }}
+          className={classNameMap[x] && classNameMap[x][y]}
+        >
+          {contentsMap[x] && contentsMap[x][y]}
         </Hex>,
       )
     }

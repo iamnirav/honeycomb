@@ -61,3 +61,43 @@ export const COLOR_CODES: number[] = [0, 1, 2, 3, 4, 5]
 export function getColor(code: number = 0) {
   return COLORS[code]
 }
+
+interface Coords {
+  x: number
+  y: number
+}
+
+function coordsAdd(a: Coords, b: Coords) {
+  return {
+    x: a.x + b.x,
+    y: a.y + b.y,
+  }
+}
+
+function coordsSubtract(a: Coords, b: Coords) {
+  return {
+    x: a.x - b.x,
+    y: a.y - b.y,
+  }
+}
+
+function coordsIsEqual(a: Coords, b: Coords) {
+  return a.x === b.x && a.y === b.y
+}
+
+const ADJACENT_VECTORS = [
+  { x: -1, y: -1 },
+  { x: 1, y: -1 },
+  { x: 2, y: 0 },
+  { x: 1, y: 1 },
+  { x: -1, y: 1 },
+  { x: -2, y: 0 },
+]
+
+export function hexAdjacent(a: Coords, b: Coords) {
+  const vec = coordsSubtract(a, b)
+  // if (vec.x === 1 && vec.y === 1) console.log('here')
+  return ADJACENT_VECTORS.some((VECTOR) => {
+    return coordsIsEqual(vec, VECTOR)
+  })
+}
