@@ -13,8 +13,10 @@ export default function TokenLayer() {
 
   useDndMonitor({
     onDragStart(event) {
-      const { x, y } = event.active.data.current?.token
-      setDragSourceHex({ x, y })
+      if (event.active.data.current?.token) {
+        const { x, y } = event.active.data.current?.token
+        setDragSourceHex({ x, y })
+      }
     },
     onDragEnd() {
       setDragSourceHex({})

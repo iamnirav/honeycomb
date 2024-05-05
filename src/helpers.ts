@@ -67,25 +67,25 @@ interface Coords {
   y: number
 }
 
-function coordsAdd(a: Coords, b: Coords) {
-  return {
-    x: a.x + b.x,
-    y: a.y + b.y,
-  }
+export const coordsMath = {
+  add(a: Coords, b: Coords) {
+    return {
+      x: a.x + b.x,
+      y: a.y + b.y,
+    }
+  },
+  subtract(a: Coords, b: Coords) {
+    return {
+      x: a.x - b.x,
+      y: a.y - b.y,
+    }
+  },
+  isEqual(a: Coords, b: Coords) {
+    return a.x === b.x && a.y === b.y
+  },
 }
 
-function coordsSubtract(a: Coords, b: Coords) {
-  return {
-    x: a.x - b.x,
-    y: a.y - b.y,
-  }
-}
-
-function coordsIsEqual(a: Coords, b: Coords) {
-  return a.x === b.x && a.y === b.y
-}
-
-const ADJACENT_VECTORS = [
+export const ADJACENT_VECTORS = [
   { x: -1, y: -1 },
   { x: 1, y: -1 },
   { x: 2, y: 0 },
@@ -95,9 +95,8 @@ const ADJACENT_VECTORS = [
 ]
 
 export function hexAdjacent(a: Coords, b: Coords) {
-  const vec = coordsSubtract(a, b)
-  // if (vec.x === 1 && vec.y === 1) console.log('here')
+  const vec = coordsMath.subtract(a, b)
   return ADJACENT_VECTORS.some((VECTOR) => {
-    return coordsIsEqual(vec, VECTOR)
+    return coordsMath.isEqual(vec, VECTOR)
   })
 }
