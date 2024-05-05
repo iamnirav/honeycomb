@@ -15,6 +15,7 @@ import {
 import clsx from 'clsx'
 import { COLOR_CODES, getColor, isOnlyEmoji, shortenName } from '@/../helpers'
 import { TokenContext } from '@/map/TokenContext'
+import ImageUploader from './ImageUploader'
 
 interface TokenModalProps {
   isOpen: boolean
@@ -90,6 +91,7 @@ export default function TokenModal({
               )
             })}
           </div>
+          <ImageUploader />
         </ModalBody>
         <ModalFooter>
           {!!token && (
