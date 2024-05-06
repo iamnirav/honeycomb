@@ -1,5 +1,5 @@
 import Layer from '@/map/Layer'
 
-export default function TokenLayer() {
+export default function BackgroundLayer() {
   return <Layer className="BackgroundLayer" />
 }
