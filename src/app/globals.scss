@@ -21,6 +21,8 @@
 
 body {
   background: rgb(var(--background-rgb));
+  width: max-content;
+  min-width: 100vw;
   min-height: 100vh;
   color: rgb(var(--foreground-rgb));
 }

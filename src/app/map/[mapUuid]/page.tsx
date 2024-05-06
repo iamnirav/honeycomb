@@ -16,12 +16,12 @@ export default function MapPage({ params }: MapPageProps) {
   return (
     <TokenProvider mapUuid={params.mapUuid}>
       <DndProvider>
-        <Navbar>
+        <Navbar className="fixed">
           <NavbarContent>
             <Bench />
           </NavbarContent>
         </Navbar>
-        <main className="p-4 pb-8">
+        <main className="px-4 pt-20 pb-10">
           <GridContainer>
             {/* Background layer */}
             <BackgroundLayer />
