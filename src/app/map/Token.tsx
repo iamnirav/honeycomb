@@ -57,6 +57,7 @@ export default function Token({ token, size = 'lg', className }: TokenProps) {
         isBordered
         size={size}
         onClick={disclosure.onOpen}
+        imgProps={{ className: 'transform-gpu' }}
       />
       <TokenModal token={token} {...disclosure} />
     </>

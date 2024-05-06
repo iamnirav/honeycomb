@@ -6,9 +6,9 @@
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 45, 45, 60;
   --hex-blank-rgb: 75, 75, 75;
-  --hex-side: 25px;
+  --hex-side: 26px;
   --hex-dim-long: calc(var(--hex-side) * sqrt(3));
-  --hex-spacing: 6px;
+  --hex-spacing: 4px;
 }
 
 // @media (prefers-color-scheme: dark) {
@@ -21,7 +21,7 @@
 
 body {
   background: rgb(var(--background-rgb));
-  height: 100vh;
+  min-height: 100vh;
   color: rgb(var(--foreground-rgb));
 }
 
@@ -31,7 +31,9 @@ body {
   justify-content: center;
   align-items: center;
   margin-top: var(--hex-side);
-  margin-bottom: calc(var(--hex-spacing) - 7px);
+  margin-bottom: calc(
+    var(--hex-spacing) - 7px
+  ); // TODO figure out magic number 7px
   margin-left: var(--hex-spacing);
   width: calc(2 * var(--hex-dim-long));
   height: calc(2 * var(--hex-side));

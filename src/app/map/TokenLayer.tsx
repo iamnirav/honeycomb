@@ -33,7 +33,7 @@ export default function TokenLayer() {
     ) => {
       if (token.x !== null && token.y !== null) {
         if (!acc[token.x]) acc[token.x] = []
-        acc[token.x][token.y] = <Token token={token} />
+        acc[token.x][token.y] = <Token token={token} className="absolute" />
       }
 
       return acc
