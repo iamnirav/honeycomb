@@ -57,7 +57,7 @@ export default function Token({ token, size = 'lg', className }: TokenProps) {
         isBordered
         size={size}
         onClick={disclosure.onOpen}
-        imgProps={{ className: 'transform-gpu' }}
+        imgProps={{ className: 'transform-gpu' }} // https://stackoverflow.com/questions/75206873/why-does-object-fit-impact-my-image-quality-and-how-to-avoid-it
       />
       <TokenModal token={token} {...disclosure} />
     </>
