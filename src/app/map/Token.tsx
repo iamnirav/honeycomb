@@ -1,26 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import { setCustomNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview'
+import { disableNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/disable-native-drag-preview'
+import { preventUnhandled } from '@atlaskit/pragmatic-drag-and-drop/prevent-unhandled'
 import { Avatar, useDisclosure } from '@nextui-org/react'
 import clsx from 'clsx'
-import ReactDOM from 'react-dom'
 import invariant from 'tiny-invariant'
 import { getColor, isOnlyEmoji, shortenName } from '@/../helpers'
 import TokenModal from './TokenModal'
 
 type TokenProps = {
-  token?: { id?: number; imgUrl: string; name: string; ring?: number }
+  token?: { imgUrl: string; name: string; ring?: number }
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
-
-type DraggableState =
-  | { type: 'idle' }
-  | { type: 'preview'; container: HTMLElement }
-  | { type: 'dragging' }
-
-const IDLE_STATE: DraggableState = { type: 'idle' }
-const DRAGGING_STATE: DraggableState = { type: 'dragging' }
 
 const SIZES = {
   sm: 'text-xl',
@@ -31,27 +23,24 @@ const SIZES = {
 export default function Token({ token, size = 'lg', className }: TokenProps) {
   const disclosure = useDisclosure()
   const ref = useRef<HTMLSpanElement>(null)
-  const [draggableState, setDraggableState] =
-    useState<DraggableState>(IDLE_STATE)
+  const [isDragging, setIsDragging] = useState<boolean>(false)
 
   useEffect(() => {
     const element = ref.current
     invariant(element)
     return draggable({
       element,
-      getInitialData: () => ({ token }),
+      getInitialData: () => (token ? { token } : { newToken: true }),
       onGenerateDragPreview({ nativeSetDragImage }) {
-        setCustomNativeDragPreview({
-          nativeSetDragImage,
-          render({ container }) {
-            setDraggableState({ type: 'preview', container })
-            return () => setDraggableState(DRAGGING_STATE)
-          },
-        })
+        disableNativeDragPreview({ nativeSetDragImage })
+        preventUnhandled.start()
       },
-      onDragStart: () => setDraggableState(DRAGGING_STATE),
+      onDragStart() {
+        setIsDragging(true)
+      },
       onDrop() {
-        setDraggableState(IDLE_STATE)
+        preventUnhandled.stop()
+        setIsDragging(false)
         if (!token) {
           disclosure.onOpen()
         }
@@ -64,8 +53,9 @@ export default function Token({ token, size = 'lg', className }: TokenProps) {
         className: clsx(
           {
             [SIZES[size]]: isOnlyEmoji(token.name.split(' ')[0]),
-            'opacity-25': draggableState.type === 'dragging',
+            'opacity-25': isDragging,
           },
+          'cursor-pointer',
           className,
         ),
         color: getColor(token.ring),
@@ -75,7 +65,7 @@ export default function Token({ token, size = 'lg', className }: TokenProps) {
       }
     : {
         name: '...',
-        className,
+        className: clsx(className, 'cursor-pointer'),
       }
 
   return (
@@ -93,22 +83,6 @@ export default function Token({ token, size = 'lg', className }: TokenProps) {
         }} // https://stackoverflow.com/questions/75206873/why-does-object-fit-impact-my-image-quality-and-how-to-avoid-it
       />
       <TokenModal token={token} {...disclosure} />
-      {draggableState.type === 'preview' &&
-        ReactDOM.createPortal(
-          <div className="p-2">
-            <Avatar
-              {...avatarProps}
-              isBordered
-              size={size}
-              imgProps={{
-                className: 'transform-gpu',
-                draggable: false,
-                style: { WebkitTouchCallout: 'none' },
-              }} // https://stackoverflow.com/questions/75206873/why-does-object-fit-impact-my-image-quality-and-how-to-avoid-it
-            />
-          </div>,
-          draggableState.container,
-        )}
     </>
   )
 }

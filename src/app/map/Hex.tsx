@@ -2,12 +2,18 @@ import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
-import { coordsMath } from '@/../helpers'
+import { coordsMath, isTypeToken, Token as TokenType } from '@/../helpers'
+import Token from '@/map/Token'
 
-type HexProps = {
+interface HexProps {
   className?: string
   isDroppable: boolean
   coords: { x: number; y: number }
+}
+
+interface DragState {
+  type: 'idle' | 'over'
+  data?: { token?: TokenType }
 }
 
 export default function Hex({
@@ -17,7 +23,9 @@ export default function Hex({
   coords,
 }: PropsWithChildren<HexProps>) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false)
+  const [dragState, setDragState] = useState<DragState>({
+    type: 'idle',
+  })
 
   useEffect(() => {
     const element = ref.current
@@ -32,18 +40,33 @@ export default function Hex({
         }: any = source
         return isDroppable && (!token || !coordsMath.isEqual(coords, token))
       },
-      onDragEnter: () => setIsDraggedOver(true),
-      onDragLeave: () => setIsDraggedOver(false),
-      onDrop: () => setIsDraggedOver(false),
+      onDragEnter({ source }) {
+        setDragState({ type: 'over', data: source.data })
+      },
+      onDragLeave: () =>
+        setDragState({
+          type: 'idle',
+        }),
+      onDrop: () =>
+        setDragState({
+          type: 'idle',
+        }),
     })
   }, [coords, isDroppable])
 
   return (
     <div
       ref={ref}
-      className={clsx('Hex', className, { DropTarget: isDraggedOver })}
+      className={clsx('Hex', className, {
+        DropTarget: dragState.type === 'over',
+      })}
     >
       {children}
+      {dragState.type === 'over' && (
+        <div className="absolute">
+          <Token token={dragState.data?.token} />
+        </div>
+      )}
     </div>
   )
 }

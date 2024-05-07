@@ -17,6 +17,12 @@ export default function Bench() {
     return dropTargetForElements({
       element,
       getData: () => ({ coords: { x: null, y: null } }),
+      canDrop({ source }) {
+        const {
+          data: { token },
+        }: any = source
+        return !!token && token.x !== null && token.y !== null
+      },
       onDragEnter: () => setIsDraggedOver(true),
       onDragLeave: () => setIsDraggedOver(false),
       onDrop: () => setIsDraggedOver(false),
@@ -42,7 +48,7 @@ export default function Bench() {
             token={token}
           />
         ))}
-      <Token size="sm" className="ml-4" />
+      <Token size="sm" className={tokens.length ? 'ml-4' : ''} />
     </div>
   )
 }
