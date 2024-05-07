@@ -28,14 +28,15 @@ export default function Layer({
       x < DEFAULT_MAX_X;
       x = x + 2
     ) {
+      const contents = contentsMap[x] && contentsMap[x][y]
       hexes.push(
         <Hex
-          isDroppable={isDroppable}
+          isDroppable={isDroppable && !contents}
           key={x}
           coords={{ x, y }}
           className={classNameMap[x] && classNameMap[x][y]}
         >
-          {contentsMap[x] && contentsMap[x][y]}
+          {contents}
         </Hex>,
       )
     }

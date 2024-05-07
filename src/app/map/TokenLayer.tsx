@@ -1,5 +1,4 @@
 import { ReactNode, useContext, useState } from 'react'
-import { useDndMonitor } from '@dnd-kit/core'
 import Layer from '@/map/Layer'
 import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
@@ -10,21 +9,6 @@ export default function TokenLayer() {
     x?: number
     y?: number
   }>({})
-
-  useDndMonitor({
-    onDragStart(event) {
-      if (event.active.data.current?.token) {
-        const { x, y } = event.active.data.current?.token
-        setDragSourceHex({ x, y })
-      }
-    },
-    onDragEnd() {
-      setDragSourceHex({})
-    },
-    onDragCancel() {
-      setDragSourceHex({})
-    },
-  })
 
   const contentsMap: ReactNode[][] = tokens.reduce(
     (

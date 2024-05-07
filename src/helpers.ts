@@ -1,3 +1,18 @@
+interface Id {
+  id: number
+}
+
+export interface Coords {
+  x: number | null
+  y: number | null
+}
+
+export interface Token extends Coords, Id {
+  name: string
+  imgUrl: string
+  ring: number
+}
+
 // TODO parameterize types
 
 export function insertFn(insertItem: any) {
@@ -6,7 +21,7 @@ export function insertFn(insertItem: any) {
   }
 }
 
-export function updateFn(updateItem: { id: number }) {
+export function updateFn(updateItem: Id) {
   return (items: any[]) => {
     return [
       ...items.filter((item: { id: number }) => item.id !== updateItem.id),
@@ -62,27 +77,31 @@ export function getColor(code: number = 0) {
   return COLORS[code]
 }
 
-interface Coords {
-  x: number
-  y: number
-}
-
 export const coordsMath = {
-  add(a: Coords, b: Coords) {
-    return {
-      x: a.x + b.x,
-      y: a.y + b.y,
-    }
-  },
-  subtract(a: Coords, b: Coords) {
-    return {
-      x: a.x - b.x,
-      y: a.y - b.y,
-    }
-  },
   isEqual(a: Coords, b: Coords) {
     return a.x === b.x && a.y === b.y
   },
+}
+
+export function isTypeCoords(param: unknown): param is Coords {
+  return (
+    !!param &&
+    typeof param === 'object' &&
+    !Array.isArray(param) &&
+    Object.hasOwn(param, 'x') &&
+    Object.hasOwn(param, 'y')
+  )
+}
+
+export function isTypeToken(param: unknown): param is Token {
+  return (
+    !!param &&
+    typeof param === 'object' &&
+    !Array.isArray(param) &&
+    Object.hasOwn(param, 'name') &&
+    Object.hasOwn(param, 'imgUrl') &&
+    Object.hasOwn(param, 'ring')
+  )
 }
 
 export const ADJACENT_VECTORS = [
@@ -93,10 +112,3 @@ export const ADJACENT_VECTORS = [
   { x: -1, y: 1 },
   { x: -2, y: 0 },
 ]
-
-export function hexAdjacent(a: Coords, b: Coords) {
-  const vec = coordsMath.subtract(a, b)
-  return ADJACENT_VECTORS.some((VECTOR) => {
-    return coordsMath.isEqual(vec, VECTOR)
-  })
-}

@@ -1,14 +1,21 @@
 import {
   createContext,
-  Dispatch,
   PropsWithChildren,
-  SetStateAction,
   useEffect,
   useMemo,
   useState,
 } from 'react'
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import db from '@/../db'
-import { deleteFn, insertFn, updateFn } from '@/../helpers'
+import {
+  Coords,
+  deleteFn,
+  insertFn,
+  isTypeCoords,
+  isTypeToken,
+  Token,
+  updateFn,
+} from '@/../helpers'
 
 interface NewTokenType {
   name: string
@@ -117,7 +124,7 @@ export function TokenProvider({
   }, [mapId])
 
   // Memoize context functions object for the rest of the app to use
-  const memoizedTokens = useMemo(() => {
+  const memoizedTokenContext = useMemo(() => {
     // TODO would this result in temporary duplicates?
     // The version coming back from the server isn't de-duped with the locally created version
     async function insertToken(token: {}) {
@@ -127,7 +134,7 @@ export function TokenProvider({
       // Create on server
       await db.from('tokens').insert({ ...token, mapId })
     }
-    async function updateToken(token: { id: number }) {
+    async function updateToken(token: Token) {
       // Update locally
       setTokens(updateFn(token))
 
@@ -143,8 +150,8 @@ export function TokenProvider({
       await db.from('tokens').delete().eq('id', token.id)
     }
 
-    function setNewTokenCoords(x: number, y: number) {
-      setNewToken({ ...newToken, x, y })
+    function setNewTokenCoords(coords: Coords) {
+      setNewToken({ ...newToken, ...coords })
     }
 
     return {
@@ -157,8 +164,35 @@ export function TokenProvider({
     }
   }, [tokens, setTokens, newToken, setNewToken, mapId])
 
+  // Set up drop monitor
+  useEffect(() => {
+    return monitorForElements({
+      onDrop({ source, location }) {
+        const { token } = source.data
+        const target = location.current.dropTargets[0]
+
+        // Dropped outside any drop targets
+        if (!target) return
+
+        // Type guard
+        if (!isTypeCoords(target.data.coords)) return
+
+        if (!token) {
+          // If no token, we're opening form to add a new one, so only populate coordinates
+          memoizedTokenContext.setNewTokenCoords(target.data.coords)
+        } else if (isTypeToken(token)) {
+          // If token exists + type guard, update
+          memoizedTokenContext.updateToken({
+            ...token,
+            ...target.data.coords,
+          })
+        }
+      },
+    })
+  })
+
   return (
-    <TokenContext.Provider value={memoizedTokens}>
+    <TokenContext.Provider value={memoizedTokenContext}>
       {children}
     </TokenContext.Provider>
   )

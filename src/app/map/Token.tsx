@@ -1,7 +1,8 @@
-import { useDraggable } from '@dnd-kit/core'
-import { CSS } from '@dnd-kit/utilities'
+import { useEffect, useRef, useState } from 'react'
+import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import { Avatar, useDisclosure } from '@nextui-org/react'
 import clsx from 'clsx'
+import invariant from 'tiny-invariant'
 import { getColor, isOnlyEmoji, shortenName } from '@/../helpers'
 import TokenModal from './TokenModal'
 
@@ -19,21 +20,32 @@ const SIZES = {
 
 export default function Token({ token, size = 'lg', className }: TokenProps) {
   const disclosure = useDisclosure()
+  const ref = useRef<HTMLSpanElement>(null)
+  const [isDragging, setIsDragging] = useState<boolean>(false)
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: token?.id || 'new-token-button',
-      data: token ? { token } : { callback: disclosure.onOpen },
+  useEffect(() => {
+    const element = ref.current
+    invariant(element)
+    return draggable({
+      element,
+      getInitialData: () => ({ token }),
+      onDragStart: () => setIsDragging(true),
+      onDrop() {
+        setIsDragging(false)
+        if (!token) {
+          disclosure.onOpen()
+        }
+      },
     })
-
-  const style = isDragging
-    ? { transform: CSS.Translate.toString(transform), zIndex: 50 }
-    : {}
+  }, [token, disclosure])
 
   const avatarProps = token
     ? {
         className: clsx(
-          isOnlyEmoji(token.name.split(' ')[0]) ? SIZES[size] : '',
+          {
+            [SIZES[size]]: isOnlyEmoji(token.name.split(' ')[0]),
+            'opacity-25': isDragging,
+          },
           className,
         ),
         color: getColor(token.ring),
@@ -49,15 +61,12 @@ export default function Token({ token, size = 'lg', className }: TokenProps) {
   return (
     <>
       <Avatar
-        ref={setNodeRef}
-        style={style}
-        {...listeners}
-        {...attributes}
+        ref={ref}
         {...avatarProps}
         isBordered
         size={size}
         onClick={disclosure.onOpen}
-        imgProps={{ className: 'transform-gpu' }} // https://stackoverflow.com/questions/75206873/why-does-object-fit-impact-my-image-quality-and-how-to-avoid-it
+        imgProps={{ className: 'transform-gpu', draggable: false }} // https://stackoverflow.com/questions/75206873/why-does-object-fit-impact-my-image-quality-and-how-to-avoid-it
       />
       <TokenModal token={token} {...disclosure} />
     </>
