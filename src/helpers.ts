@@ -13,6 +13,11 @@ export interface Token extends Coords, Id {
   ring: number
 }
 
+export interface Map {
+  name: string
+  uuid: string
+}
+
 // TODO parameterize types
 
 export function insertFn(insertItem: any) {

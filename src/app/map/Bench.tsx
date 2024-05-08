@@ -48,7 +48,7 @@ export default function Bench() {
             token={token}
           />
         ))}
-      <Token size="sm" className={tokens.length ? 'ml-4' : ''} />
+      <Token size="sm" className="ml-4" />
     </div>
   )
 }

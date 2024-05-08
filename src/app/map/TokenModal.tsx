@@ -95,7 +95,7 @@ export default function TokenModal({
         </ModalBody>
         <ModalFooter>
           {!!token && (
-            <Popover placement="top-start" showArrow={false} backdrop="blur">
+            <Popover placement="top-start" backdrop="blur">
               <PopoverTrigger>
                 <Button className="mr-auto" color="danger" variant="light">
                   Delete&hellip;

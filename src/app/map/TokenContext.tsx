@@ -16,6 +16,7 @@ import {
   Token,
   updateFn,
 } from '@/../helpers'
+import { updateMapsLocalStorage } from '@/../localStorage'
 
 interface NewTokenType {
   name: string
@@ -78,6 +79,7 @@ export function TokenProvider({
         document.title = `${map.name} · Honeycomb`
         setMapId(map.id)
         setTokens(map.tokens)
+        updateMapsLocalStorage(map)
       }
     }
 
@@ -87,6 +89,14 @@ export function TokenProvider({
       ac.abort()
     }
   }, [mapUuid])
+
+  // Scroll to middle of map on load
+  useEffect(() => {
+    window.scroll(
+      document.body.offsetWidth / 2 - window.innerWidth / 2,
+      document.body.offsetHeight / 2 - window.innerHeight / 2,
+    )
+  }, [mapId])
 
   // Subscribe to token updates
   // TODO change to using supabase broadcast for live updates to ease load on db
