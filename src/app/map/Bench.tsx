@@ -37,7 +37,7 @@ export default function Bench() {
   return (
     <div
       ref={ref}
-      className={`inline-flex p-3 shadow-inner rounded-full shadow-black/25 ${bgClass}`}
+      className={`inline-flex p-2 shadow-inner rounded-full shadow-black/25 ${bgClass}`}
     >
       {tokens
         .filter((token: any) => token.x === null || token.y === null)

@@ -14,6 +14,7 @@ export interface Token extends Coords, Id {
 }
 
 export interface Map {
+  id?: number
   name: string
   uuid: string
 }

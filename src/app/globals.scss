@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 60, 60, 60;
-  --hex-blank-rgb: 75, 75, 75;
+  --foreground-rgb: 0 0 0;
+  --background-rgb: 60 60 60;
+  --hex-blank-rgb: 75 75 75;
   --hex-side: 26px;
   --hex-dim-long: calc(var(--hex-side) * sqrt(3));
   --hex-spacing: 4px;
@@ -28,49 +28,45 @@ body {
 }
 
 .Hex {
-  display: inline-flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  margin-top: var(--hex-side);
-  margin-bottom: calc(
-    var(--hex-spacing) - 7px
-  ); // TODO figure out magic number 7px
+  display: inline-block;
+  // TODO figure out magic number 7px
+  margin-bottom: calc(var(--hex-spacing) - var(--hex-side) - 7px);
   margin-left: var(--hex-spacing);
-  width: calc(2 * var(--hex-dim-long));
-  height: calc(2 * var(--hex-side));
 
-  &:before {
-    position: absolute;
-    top: calc(-1 * var(--hex-side));
+  .HexTop {
     border-right: var(--hex-dim-long) solid transparent;
     border-bottom: var(--hex-side) solid transparent;
     border-left: var(--hex-dim-long) solid transparent;
     width: 0;
-    height: 0;
-    content: ' ';
   }
 
-  &:after {
-    position: absolute;
-    bottom: calc(-1 * var(--hex-side));
+  .HexMiddle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(2 * var(--hex-dim-long));
+    height: calc(2 * var(--hex-side));
+  }
+
+  .HexBottom {
     border-top: var(--hex-side) solid transparent;
     border-right: var(--hex-dim-long) solid transparent;
     border-left: var(--hex-dim-long) solid transparent;
     width: 0;
-    content: '';
   }
 }
 
 .BackgroundLayer {
   .Hex {
-    background-color: rgb(var(--hex-blank-rgb));
-
-    &:before {
+    .HexTop {
       border-bottom-color: rgb(var(--hex-blank-rgb));
     }
 
-    &:after {
+    .HexMiddle {
+      background-color: rgb(var(--hex-blank-rgb));
+    }
+
+    .HexBottom {
       border-top-color: rgb(var(--hex-blank-rgb));
     }
   }
@@ -78,13 +74,14 @@ body {
 
 .TokenLayer {
   .Hex.DropTarget {
-    background-color: rgba(255, 255, 255, 0.25);
-
-    &:before {
+    .HexTop {
       border-bottom-color: rgba(255, 255, 255, 0.25);
     }
+    .HexMiddle {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
 
-    &:after {
+    .HexBottom {
       border-top-color: rgba(255, 255, 255, 0.25);
     }
   }

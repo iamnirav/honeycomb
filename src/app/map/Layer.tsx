@@ -1,19 +1,19 @@
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import clsx from 'clsx'
-import Hex from '@/map/Hex'
+import Hex, { HexStyle } from '@/map/Hex'
 import { DEFAULT_MAX_X, DEFAULT_MAX_Y } from '../../constants'
 
-type LayerProps = {
+interface LayerProps {
   className?: string
-  contentsMap?: ReactNode[][]
-  classNameMap?: string[][]
+  contents?: ReactNode[][]
+  styles?: HexStyle[][]
   isDroppable?: boolean
 }
 
 export default function Layer({
   className,
-  contentsMap = [],
-  classNameMap = [],
+  contents = [],
+  styles = [],
   isDroppable = false,
 }: LayerProps) {
   const rows = []
@@ -28,15 +28,15 @@ export default function Layer({
       x < DEFAULT_MAX_X;
       x = x + 2
     ) {
-      const contents = contentsMap[x] && contentsMap[x][y]
+      const children = contents[x] && contents[x][y]
       hexes.push(
         <Hex
-          isDroppable={isDroppable && !contents}
+          isDroppable={isDroppable && !children}
           key={x}
           coords={{ x, y }}
-          className={classNameMap[x] && classNameMap[x][y]}
+          style={styles[x] && styles[x][y]}
         >
-          {contents}
+          {children}
         </Hex>,
       )
     }

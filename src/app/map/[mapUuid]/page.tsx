@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import {
   Button,
   Navbar,
@@ -10,38 +11,58 @@ import {
 import BackgroundLayer from '@/map/BackgroundLayer'
 import Bench from '@/map/Bench'
 import GridContainer from '@/map/GridContainer'
+import { MapProvider } from '@/map/MapContext'
+import MapModal from '@/map/MapModal'
+import Palette, { BackgroundColor } from '@/map/Palette'
 import { TokenProvider } from '@/map/TokenContext'
 import TokenLayer from '@/map/TokenLayer'
-import MapModal from '../MapModal'
+import useAsyncMap from '../useAsyncMap'
 
 interface MapPageProps {
   params: { mapUuid: string }
 }
 
 export default function Map({ params }: MapPageProps) {
+  const { map, tokens } = useAsyncMap(params.mapUuid)
   const disclosure = useDisclosure()
+  const [layer, setLayer] = useState<'token' | 'background'>('background')
+  const [brush, setBrush] = useState<BackgroundColor>(null)
+
+  if (!map) return
 
   return (
-    <TokenProvider mapUuid={params.mapUuid}>
-      <Navbar className="fixed">
-        <NavbarBrand className="text-2xl">⬡</NavbarBrand>
-        <NavbarContent justify="center">
-          <Bench />
-        </NavbarContent>
-        <NavbarContent justify="end">
-          <Button onPress={disclosure.onOpen}>Maps</Button>
-        </NavbarContent>
-      </Navbar>
-      <main className="px-4 pt-20 pb-10">
-        <GridContainer>
-          {/* Background layer */}
-          <BackgroundLayer />
+    <MapProvider map={map}>
+      <TokenProvider mapId={map.id} tokens={tokens}>
+        <Navbar className="fixed">
+          <NavbarBrand className="text-2xl">⬡</NavbarBrand>
+          <NavbarContent justify="center">
+            {layer === 'token' && <Bench />}
+            {layer === 'background' && (
+              <Palette brush={brush} setBrush={setBrush} />
+            )}
+          </NavbarContent>
+          <NavbarContent justify="end">
+            <Button
+              onPress={() =>
+                setLayer(layer === 'token' ? 'background' : 'token')
+              }
+            >
+              Toggle Layer
+            </Button>
+            <Button onPress={disclosure.onOpen}>Maps</Button>
+          </NavbarContent>
+        </Navbar>
+        <main className="px-4 pt-20 pb-10">
+          <GridContainer>
+            {/* Background layer */}
+            <BackgroundLayer isFocused={layer === 'background'} />
 
-          {/* Token layer */}
-          <TokenLayer />
-        </GridContainer>
-      </main>
-      <MapModal {...disclosure} />
-    </TokenProvider>
+            {/* Token layer */}
+            <TokenLayer isFocused={layer === 'token'} />
+          </GridContainer>
+        </main>
+        <MapModal {...disclosure} />
+      </TokenProvider>
+    </MapProvider>
   )
 }

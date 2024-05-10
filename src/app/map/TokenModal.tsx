@@ -91,7 +91,7 @@ export default function TokenModal({
               )
             })}
           </div>
-          <ImageUploader />
+          {/* <ImageUploader /> */}
         </ModalBody>
         <ModalFooter>
           {!!token && (

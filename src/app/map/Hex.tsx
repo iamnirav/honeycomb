@@ -1,14 +1,26 @@
-import { PropsWithChildren, useEffect, useRef, useState } from 'react'
+import {
+  CSSProperties,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
-import { coordsMath, isTypeToken, Token as TokenType } from '@/../helpers'
+import { coordsMath, Token as TokenType } from '@/../helpers'
 import Token from '@/map/Token'
 
+export interface HexStyle {
+  top: CSSProperties
+  middle: CSSProperties
+  bottom: CSSProperties
+}
+
 interface HexProps {
-  className?: string
   isDroppable: boolean
   coords: { x: number; y: number }
+  style?: HexStyle
 }
 
 interface DragState {
@@ -17,10 +29,10 @@ interface DragState {
 }
 
 export default function Hex({
-  className,
   children,
   isDroppable,
   coords,
+  style = { top: {}, middle: {}, bottom: {} },
 }: PropsWithChildren<HexProps>) {
   const ref = useRef<HTMLDivElement>(null)
   const [dragState, setDragState] = useState<DragState>({
@@ -57,16 +69,20 @@ export default function Hex({
   return (
     <div
       ref={ref}
-      className={clsx('Hex', className, {
+      className={clsx('Hex', {
         DropTarget: dragState.type === 'over',
       })}
     >
-      {children}
-      {dragState.type === 'over' && (
-        <div className="absolute">
-          <Token token={dragState.data?.token} />
-        </div>
-      )}
+      <div className="HexTop" style={style.top} />
+      <div className="HexMiddle" style={style.middle}>
+        {children}
+        {dragState.type === 'over' && (
+          <div className="absolute">
+            <Token token={dragState.data?.token} />
+          </div>
+        )}
+      </div>
+      <div className="HexBottom" style={style.bottom} />
     </div>
   )
 }

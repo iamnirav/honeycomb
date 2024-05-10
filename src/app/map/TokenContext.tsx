@@ -16,7 +16,6 @@ import {
   Token,
   updateFn,
 } from '@/../helpers'
-import { updateMapsLocalStorage } from '@/../localStorage'
 
 interface NewTokenType {
   name: string
@@ -44,14 +43,12 @@ export const TokenContext = createContext<TokenContextType>({
   setNewTokenCoords: () => {},
 })
 
-export function TokenProvider({
-  children,
-  mapUuid,
-}: PropsWithChildren<{ mapUuid: string }>) {
+export function TokenProvider(
+  props: PropsWithChildren<{ mapId: number; tokens: Token[] }>,
+) {
   // TODO generate types from db
   // https://supabase.com/docs/guides/api/rest/generating-types
-  const [tokens, setTokens] = useState([] as any)
-  const [mapId, setMapId] = useState(undefined)
+  const [tokens, setTokens] = useState(props.tokens)
   const [newToken, setNewToken] = useState<NewTokenType>({
     x: null,
     y: null,
@@ -60,49 +57,19 @@ export function TokenProvider({
     imgUrl: '',
   })
 
-  // Initial load of map and tokens
-  useEffect(() => {
-    const ac = new AbortController()
-
-    // TODO get initial tokens via server component
-    // https://supabase.com/docs/guides/realtime/realtime-with-nextjs
-    async function fetchTokens() {
-      const { data, error } = await db
-        .from('maps')
-        .select('id, uuid, name, tokens (id, imgUrl, name, x, y, ring)')
-        .filter('uuid', 'eq', mapUuid)
-        .limit(1)
-        .abortSignal(ac.signal)
-
-      if (!error && data.length) {
-        const map = data[0]
-        document.title = `${map.name} · Honeycomb`
-        setMapId(map.id)
-        setTokens(map.tokens)
-        updateMapsLocalStorage(map)
-      }
-    }
-
-    fetchTokens()
-
-    return () => {
-      ac.abort()
-    }
-  }, [mapUuid])
-
   // Scroll to middle of map on load
   useEffect(() => {
     window.scroll(
       document.body.offsetWidth / 2 - window.innerWidth / 2,
       document.body.offsetHeight / 2 - window.innerHeight / 2,
     )
-  }, [mapId])
+  }, [props.mapId])
 
   // Subscribe to token updates
   // TODO change to using supabase broadcast for live updates to ease load on db
   useEffect(() => {
     // Only subscribe once mapId has been fetched
-    if (!mapId) return
+    if (!props.mapId) return
 
     const channel = db.channel('tokens-channel')
     channel
@@ -112,7 +79,7 @@ export function TokenProvider({
           event: '*',
           schema: 'public',
           table: 'tokens',
-          filter: `mapId=eq.${mapId}`,
+          filter: `mapId=eq.${props.mapId}`,
         },
         (data) => {
           if (!data.errors) {
@@ -131,18 +98,16 @@ export function TokenProvider({
     return () => {
       db.removeChannel(channel)
     }
-  }, [mapId])
+  }, [props.mapId])
 
   // Memoize context functions object for the rest of the app to use
-  const memoizedTokenContext = useMemo(() => {
-    // TODO would this result in temporary duplicates?
-    // The version coming back from the server isn't de-duped with the locally created version
+  const memoizedTokenContext: TokenContextType = useMemo(() => {
     async function insertToken(token: {}) {
       // Create locally
       setTokens(insertFn(token))
 
       // Create on server
-      await db.from('tokens').insert({ ...token, mapId })
+      await db.from('tokens').insert({ ...token, mapId: props.mapId })
     }
     async function updateToken(token: Token) {
       // Update locally
@@ -172,7 +137,7 @@ export function TokenProvider({
       newToken,
       setNewTokenCoords,
     }
-  }, [tokens, setTokens, newToken, setNewToken, mapId])
+  }, [tokens, setTokens, newToken, setNewToken, props.mapId])
 
   // Set up drop monitor
   useEffect(() => {
@@ -203,7 +168,7 @@ export function TokenProvider({
 
   return (
     <TokenContext.Provider value={memoizedTokenContext}>
-      {children}
+      {props.children}
     </TokenContext.Provider>
   )
 }

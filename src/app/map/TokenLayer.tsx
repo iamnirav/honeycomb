@@ -1,16 +1,17 @@
 import { ReactNode, useContext, useState } from 'react'
+import clsx from 'clsx'
 import Layer from '@/map/Layer'
 import Token from '@/map/Token'
 import { TokenContext } from '@/map/TokenContext'
 
-export default function TokenLayer() {
-  const { tokens } = useContext(TokenContext)
-  const [dragSourceHex, setDragSourceHex] = useState<{
-    x?: number
-    y?: number
-  }>({})
+interface TokenLayerProps {
+  isFocused: boolean
+}
 
-  const contentsMap: ReactNode[][] = tokens.reduce(
+export default function TokenLayer({ isFocused }: TokenLayerProps) {
+  const { tokens } = useContext(TokenContext)
+
+  const contents: ReactNode[][] = tokens.reduce(
     (
       acc: ReactNode[][],
       token: { x: number; y: number; imgUrl: string; name: string },
@@ -29,17 +30,12 @@ export default function TokenLayer() {
     [],
   )
 
-  const classNameMap: string[][] = []
-  if (dragSourceHex.x && dragSourceHex.y) {
-    if (!classNameMap[dragSourceHex.x]) classNameMap[dragSourceHex.x] = []
-    classNameMap[dragSourceHex.x][dragSourceHex.y] = 'DragSource'
-  }
-
   return (
     <Layer
-      className="TokenLayer"
-      contentsMap={contentsMap}
-      classNameMap={classNameMap}
+      className={clsx('TokenLayer', {
+        'pointer-events-none opacity-50': !isFocused,
+      })}
+      contents={contents}
       isDroppable={true}
     />
   )
