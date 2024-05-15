@@ -8,15 +8,15 @@ import {
   NavbarContent,
   useDisclosure,
 } from '@nextui-org/react'
-import BackgroundLayer from '@/map/BackgroundLayer'
-import Bench from '@/map/Bench'
-import GridContainer from '@/map/GridContainer'
-import { MapProvider } from '@/map/MapContext'
-import MapModal from '@/map/MapModal'
-import Palette, { BackgroundColor } from '@/map/Palette'
-import { TokenProvider } from '@/map/TokenContext'
-import TokenLayer from '@/map/TokenLayer'
-import useAsyncMap from '../useAsyncMap'
+import useAsyncMap from '@/hooks/useAsyncMap'
+import BackgroundLayer from '../BackgroundLayer'
+import Bench from '../Bench'
+import GridContainer from '../GridContainer'
+import { MapProvider } from '../MapContext'
+import MapModal from '../MapModal'
+import Palette, { BackgroundColor } from '../Palette'
+import { TokenProvider } from '../TokenContext'
+import TokenLayer from '../TokenLayer'
 
 interface MapPageProps {
   params: { mapUuid: string }

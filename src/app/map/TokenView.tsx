@@ -5,11 +5,12 @@ import { preventUnhandled } from '@atlaskit/pragmatic-drag-and-drop/prevent-unha
 import { Avatar, useDisclosure } from '@nextui-org/react'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
-import { getColor, isOnlyEmoji, shortenName } from '@/../helpers'
+import { getColor, isOnlyEmoji, shortenName } from '@/helpers'
+import { Token } from '@/types'
 import TokenModal from './TokenModal'
 
-type TokenProps = {
-  token?: { imgUrl: string; name: string; ring?: number }
+type TokenViewProps = {
+  token?: Token
   size?: 'sm' | 'md' | 'lg'
   className?: string
 }
@@ -20,7 +21,11 @@ const SIZES = {
   lg: 'text-3xl',
 }
 
-export default function Token({ token, size = 'lg', className }: TokenProps) {
+export default function TokenView({
+  token,
+  size = 'lg',
+  className,
+}: TokenViewProps) {
   const disclosure = useDisclosure()
   const ref = useRef<HTMLSpanElement>(null)
   const [isDragging, setIsDragging] = useState<boolean>(false)

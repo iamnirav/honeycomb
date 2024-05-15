@@ -8,8 +8,9 @@ import {
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
-import { coordsMath, Token as TokenType } from '@/../helpers'
-import Token from '@/map/Token'
+import { coordsMath } from '@/helpers'
+import { Token } from '@/types'
+import TokenView from './TokenView'
 
 export interface HexStyle {
   top: CSSProperties
@@ -25,7 +26,7 @@ interface HexProps {
 
 interface DragState {
   type: 'idle' | 'over'
-  data?: { token?: TokenType }
+  data?: { token?: Token }
 }
 
 export default function Hex({
@@ -78,7 +79,7 @@ export default function Hex({
         {children}
         {dragState.type === 'over' && (
           <div className="absolute">
-            <Token token={dragState.data?.token} />
+            <TokenView token={dragState.data?.token} />
           </div>
         )}
       </div>

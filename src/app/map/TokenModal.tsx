@@ -13,15 +13,17 @@ import {
   PopoverTrigger,
 } from '@nextui-org/react'
 import clsx from 'clsx'
-import { COLOR_CODES, getColor, isOnlyEmoji, shortenName } from '@/../helpers'
-import { TokenContext } from '@/map/TokenContext'
-import ImageUploader from './ImageUploader'
+import { COLOR_CODES, getColor, isOnlyEmoji, shortenName } from '@/helpers'
+import { Token } from '@/types'
+import { TokenContext } from './TokenContext'
+
+// import ImageUploader from './ImageUploader'
 
 interface TokenModalProps {
   isOpen: boolean
   onOpenChange: () => void
   onClose: () => void
-  token?: { name?: string; imgUrl?: string; ring?: number }
+  token?: Token
 }
 
 export default function TokenModal({
@@ -30,18 +32,21 @@ export default function TokenModal({
   onClose,
   token,
 }: TokenModalProps) {
-  const { insertToken, updateToken, deleteToken, newToken } =
+  const { insertToken, updateToken, deleteToken, newToken, setNewTokenCoords } =
     useContext(TokenContext)
 
   const [form, setForm] = useState(token || newToken)
 
   useEffect(() => {
-    setForm(token || newToken)
+    if (isOpen) {
+      setForm(token || { ...newToken, uuid: crypto.randomUUID() })
+    }
   }, [token, newToken, isOpen])
 
   function save() {
     if (!token) {
       insertToken({ ...form })
+      setNewTokenCoords({ x: null, y: null }) // clear coordinates from a drag/drop token creation
     } else {
       updateToken({ ...form })
     }
@@ -63,6 +68,7 @@ export default function TokenModal({
             value={form.name}
             onValueChange={(name) => setForm({ ...form, name })}
           />
+          {/* TODO rate limit requests based on typing in the image url field */}
           <Input
             label="Image URL"
             value={form.imgUrl}

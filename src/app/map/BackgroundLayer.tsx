@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import { HexStyle } from '@/map/Hex'
-import Layer from '@/map/Layer'
+import { HexStyle } from './Hex'
+import Layer from './Layer'
 
 const styles: HexStyle[][] = []
 styles[10] = []

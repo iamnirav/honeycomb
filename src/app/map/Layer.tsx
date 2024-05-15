@@ -1,7 +1,7 @@
-import { CSSProperties, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import clsx from 'clsx'
-import Hex, { HexStyle } from '@/map/Hex'
-import { DEFAULT_MAX_X, DEFAULT_MAX_Y } from '../../constants'
+import { DEFAULT_MAX_X, DEFAULT_MAX_Y } from '@/constants'
+import Hex, { HexStyle } from './Hex'
 
 interface LayerProps {
   className?: string

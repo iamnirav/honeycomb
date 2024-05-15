@@ -6,40 +6,32 @@ import {
   useState,
 } from 'react'
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
-import db from '@/../db'
-import {
-  Coords,
-  deleteFn,
-  insertFn,
-  isTypeCoords,
-  isTypeToken,
-  Token,
-  updateFn,
-} from '@/../helpers'
-
-interface NewTokenType {
-  name: string
-  ring: number | null
-  x: number | null
-  y: number | null
-  imgUrl: string
-}
+import db from '@/db'
+import { deleteFn, insertFn, updateFn } from '@/helpers'
+import { Coords, isTypeCoords, isTypeToken, NewToken, Token } from '@/types'
 
 interface TokenContextType {
-  tokens: any
+  tokens: Token[]
   insertToken: Function
   updateToken: Function
   deleteToken: Function
-  newToken: NewTokenType
+  newToken: NewToken
   setNewTokenCoords: Function
 }
 
 export const TokenContext = createContext<TokenContextType>({
-  tokens: {},
+  tokens: [],
   insertToken: () => {},
   updateToken: () => {},
   deleteToken: () => {},
-  newToken: { x: null, y: null, name: '', ring: null, imgUrl: '' },
+  newToken: {
+    x: null,
+    y: null,
+    name: '',
+    ring: null,
+    imgUrl: '',
+    uuid: '',
+  },
   setNewTokenCoords: () => {},
 })
 
@@ -48,13 +40,14 @@ export function TokenProvider(
 ) {
   // TODO generate types from db
   // https://supabase.com/docs/guides/api/rest/generating-types
-  const [tokens, setTokens] = useState(props.tokens)
-  const [newToken, setNewToken] = useState<NewTokenType>({
+  const [tokens, setTokens] = useState<Token[]>(props.tokens)
+  const [newToken, setNewToken] = useState<NewToken>({
     x: null,
     y: null,
     name: '',
     ring: null,
     imgUrl: '',
+    uuid: '',
   })
 
   // Scroll to middle of map on load
@@ -84,11 +77,11 @@ export function TokenProvider(
         (data) => {
           if (!data.errors) {
             if (data.eventType === 'INSERT') {
-              setTokens(insertFn(data.new))
+              setTokens(insertFn<Token>(data.new as Token))
             } else if (data.eventType === 'UPDATE' && data.new.id) {
-              setTokens(updateFn(data.new as { id: number }))
+              setTokens(updateFn<Token>(data.new as Token))
             } else if (data.eventType === 'DELETE' && data.old.id) {
-              setTokens(deleteFn(data.old as { id: number }))
+              setTokens(deleteFn<Token>(data.old as Token))
             }
           }
         },
@@ -102,24 +95,24 @@ export function TokenProvider(
 
   // Memoize context functions object for the rest of the app to use
   const memoizedTokenContext: TokenContextType = useMemo(() => {
-    async function insertToken(token: {}) {
+    async function insertToken(token: Token) {
       // Create locally
-      setTokens(insertFn(token))
+      setTokens(insertFn<Token>(token))
 
       // Create on server
       await db.from('tokens').insert({ ...token, mapId: props.mapId })
     }
     async function updateToken(token: Token) {
       // Update locally
-      setTokens(updateFn(token))
+      setTokens(updateFn<Token>(token))
 
       // Update on server
       await db.from('tokens').update(token).eq('id', token.id)
     }
 
-    async function deleteToken(token: { id: number }) {
+    async function deleteToken(token: Token) {
       // Delete locally
-      setTokens(deleteFn(token))
+      setTokens(deleteFn<Token>(token))
 
       // Delete on server
       await db.from('tokens').delete().eq('id', token.id)

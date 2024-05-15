@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import db from '@/../db'
-import { Token } from '@/../helpers'
-import { updateMapsLocalStorage } from '@/../localStorage'
-import { MapType } from '@/map/MapContext'
+import { MapType } from '@/app/map/MapContext'
+import db from '@/db'
+import localStorage from '@/localStorage'
+import { Token } from '@/types'
 
 export default function useAsyncMap(uuid: string) {
   const [result, setResult] = useState<{
@@ -23,7 +23,7 @@ export default function useAsyncMap(uuid: string) {
       const { data, error } = await db
         .from('maps')
         .select(
-          'id, uuid, name, background, tokens (id, imgUrl, name, x, y, ring)',
+          'id, uuid, name, tiles, tokens (id, imgUrl, name, x, y, ring, uuid)',
         )
         .filter('uuid', 'eq', uuid)
         .limit(1)
@@ -32,9 +32,9 @@ export default function useAsyncMap(uuid: string) {
       if (!error && data.length) {
         const map = data[0]
         document.title = `${map.name} · Honeycomb`
-        const { id, uuid, name, background, tokens } = map
-        setResult({ map: { id, uuid, name, background }, tokens })
-        updateMapsLocalStorage(map)
+        const { id, uuid, name, tiles, tokens } = map
+        setResult({ map: { id, uuid, name, tiles }, tokens })
+        localStorage.upsertMap(map)
       }
     }
 

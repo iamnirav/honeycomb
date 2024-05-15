@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import invariant from 'tiny-invariant'
-import Token from '@/map/Token'
-import { TokenContext } from '@/map/TokenContext'
+import { TokenContext } from './TokenContext'
+import Token from './TokenView'
 
 export default function Bench() {
   const { tokens } = useContext(TokenContext)

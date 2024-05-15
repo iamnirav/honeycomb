@@ -1,6 +1,6 @@
 import { ReactNode, useRef } from 'react'
 import { Button } from '@nextui-org/react'
-import db from '@/../db'
+import db from '@/db'
 
 export default function ImageUploader() {
   const inputRef = useRef<HTMLInputElement>(null)

@@ -5,23 +5,23 @@ import {
   useMemo,
   useState,
 } from 'react'
-import db from '@/../db'
+import db from '@/db'
 
 export interface MapType {
   id: number
   name: string
   uuid: string
-  background: string[][]
+  tiles: string[][]
 }
 
 interface MapContextType {
   map: MapType
-  updateBackground: Function
+  updateTiles: Function
 }
 
 export const MapContext = createContext<MapContextType>({
-  map: { id: -1, name: '', uuid: '', background: [] },
-  updateBackground: () => {},
+  map: { id: -1, name: '', uuid: '', tiles: [] },
+  updateTiles: () => {},
 })
 
 export function MapProvider(props: PropsWithChildren<{ map: MapType }>) {
@@ -62,22 +62,22 @@ export function MapProvider(props: PropsWithChildren<{ map: MapType }>) {
 
   // Memoize context functions object for the rest of the app to use
   const memoizedMapContext: MapContextType = useMemo(() => {
-    async function updateBackground(background: string[][]) {
+    async function updateTiles(tiles: string[][]) {
       if (map) {
         // Update locally
-        setMap({ ...map, background })
+        setMap({ ...map, tiles })
 
         // Update on server
         await db
           .from('maps')
-          .update({ ...map, background })
+          .update({ ...map, tiles })
           .eq('id', map.id)
       }
     }
 
     return {
       map,
-      updateBackground,
+      updateTiles,
     }
   }, [map])
 

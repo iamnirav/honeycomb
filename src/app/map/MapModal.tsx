@@ -17,13 +17,10 @@ import {
   Tab,
   Tabs,
 } from '@nextui-org/react'
-import db from '@/../db'
-import { Map } from '@/../helpers'
-import {
-  getMapsFromLocalStorage,
-  removeMapFromLocalStorage,
-} from '@/../localStorage'
 import { navigate } from '@/actions'
+import db from '@/db'
+import localStorage from '@/localStorage'
+import { Map } from '@/types'
 
 interface MapModalProps {
   isOpen: boolean
@@ -36,7 +33,6 @@ interface MapModalProps {
 export default function MapModal({
   isOpen,
   onOpenChange,
-  onClose,
   backdrop = 'blur',
   hideCloseButton = true,
 }: MapModalProps) {
@@ -47,7 +43,7 @@ export default function MapModal({
   const [confirmRemoveOpen, setConfirmRemoveOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    setRecentMaps(getMapsFromLocalStorage())
+    setRecentMaps(localStorage.getMaps())
   }, [])
 
   async function createMap() {
@@ -67,7 +63,7 @@ export default function MapModal({
   function confirmRemove() {
     const mapUuids = Array.from(selectedMaps)
     if (mapUuids.length) {
-      removeMapFromLocalStorage(mapUuids[0])
+      localStorage.removeMap(mapUuids[0])
       setRecentMaps(
         recentMaps.filter((recentMap) => recentMap.uuid !== mapUuids[0]),
       )

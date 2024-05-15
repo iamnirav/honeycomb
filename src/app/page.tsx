@@ -1,7 +1,7 @@
 'use client'
 
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react'
-import MapModal from '@/map/MapModal'
+import MapModal from '@/app/map/MapModal'
 
 export default function Home() {
   return (

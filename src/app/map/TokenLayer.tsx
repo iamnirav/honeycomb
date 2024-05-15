@@ -1,8 +1,8 @@
-import { ReactNode, useContext, useState } from 'react'
+import { ReactNode, useContext } from 'react'
 import clsx from 'clsx'
-import Layer from '@/map/Layer'
-import Token from '@/map/Token'
-import { TokenContext } from '@/map/TokenContext'
+import Layer from './Layer'
+import { TokenContext } from './TokenContext'
+import Token from './TokenView'
 
 interface TokenLayerProps {
   isFocused: boolean

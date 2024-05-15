@@ -1,46 +1,23 @@
-interface Id {
-  id: number
-}
+import { Coords, HasId, HasUuid } from '@/types'
 
-export interface Coords {
-  x: number | null
-  y: number | null
-}
-
-export interface Token extends Coords, Id {
-  name: string
-  imgUrl: string
-  ring: number
-}
-
-export interface Map {
-  id?: number
-  name: string
-  uuid: string
-}
-
-// TODO parameterize types
-
-export function insertFn(insertItem: any) {
-  return (items: any[]) => {
-    return [...items.filter((item: { id: number }) => item.id), insertItem]
-  }
-}
-
-export function updateFn(updateItem: Id) {
-  return (items: any[]) => {
+export function insertFn<T extends HasUuid>(insertItem: T) {
+  return (items: T[]) => {
     return [
-      ...items.filter((item: { id: number }) => item.id !== updateItem.id),
-      updateItem,
+      ...items.filter((item) => item.uuid !== insertItem.uuid),
+      insertItem,
     ]
   }
 }
 
-export function deleteFn(deleteItem: { id: number }) {
-  return (items: any[]) => {
-    return [
-      ...items.filter((item: { id: number }) => item.id !== deleteItem.id),
-    ]
+export function updateFn<T extends HasId>(updateItem: T) {
+  return (items: T[]) => {
+    return [...items.filter((item) => item.id !== updateItem.id), updateItem]
+  }
+}
+
+export function deleteFn<T extends HasId>(deleteItem: T) {
+  return (items: T[]) => {
+    return [...items.filter((item) => item.id !== deleteItem.id)]
   }
 }
 
@@ -79,8 +56,8 @@ export const COLORS: NextUiColors = {
 
 export const COLOR_CODES: number[] = [0, 1, 2, 3, 4, 5]
 
-export function getColor(code: number = 0) {
-  return COLORS[code]
+export function getColor(code: number | null) {
+  return COLORS[code || 0]
 }
 
 export const coordsMath = {
@@ -88,28 +65,6 @@ export const coordsMath = {
     return a.x === b.x && a.y === b.y
   },
 }
-
-export function isTypeCoords(param: unknown): param is Coords {
-  return (
-    !!param &&
-    typeof param === 'object' &&
-    !Array.isArray(param) &&
-    Object.hasOwn(param, 'x') &&
-    Object.hasOwn(param, 'y')
-  )
-}
-
-export function isTypeToken(param: unknown): param is Token {
-  return (
-    !!param &&
-    typeof param === 'object' &&
-    !Array.isArray(param) &&
-    Object.hasOwn(param, 'name') &&
-    Object.hasOwn(param, 'imgUrl') &&
-    Object.hasOwn(param, 'ring')
-  )
-}
-
 export const ADJACENT_VECTORS = [
   { x: -1, y: -1 },
   { x: 1, y: -1 },
