@@ -9,12 +9,12 @@ import {
   useDisclosure,
 } from '@nextui-org/react'
 import useAsyncMap from '@/hooks/useAsyncMap'
-import BackgroundLayer from '../BackgroundLayer'
 import Bench from '../Bench'
 import GridContainer from '../GridContainer'
 import { MapProvider } from '../MapContext'
 import MapModal from '../MapModal'
 import Palette, { BackgroundColor } from '../Palette'
+import TileLayer from '../TileLayer'
 import { TokenProvider } from '../TokenContext'
 import TokenLayer from '../TokenLayer'
 
@@ -25,7 +25,7 @@ interface MapPageProps {
 export default function Map({ params }: MapPageProps) {
   const { map, tokens } = useAsyncMap(params.mapUuid)
   const disclosure = useDisclosure()
-  const [layer, setLayer] = useState<'token' | 'background'>('background')
+  const [layer, setLayer] = useState<'token' | 'tile'>('tile')
   const [brush, setBrush] = useState<BackgroundColor>(null)
 
   if (!map) return
@@ -37,15 +37,11 @@ export default function Map({ params }: MapPageProps) {
           <NavbarBrand className="text-2xl">⬡</NavbarBrand>
           <NavbarContent justify="center">
             {layer === 'token' && <Bench />}
-            {layer === 'background' && (
-              <Palette brush={brush} setBrush={setBrush} />
-            )}
+            {layer === 'tile' && <Palette brush={brush} setBrush={setBrush} />}
           </NavbarContent>
           <NavbarContent justify="end">
             <Button
-              onPress={() =>
-                setLayer(layer === 'token' ? 'background' : 'token')
-              }
+              onPress={() => setLayer(layer === 'token' ? 'tile' : 'token')}
             >
               Toggle Layer
             </Button>
@@ -54,8 +50,8 @@ export default function Map({ params }: MapPageProps) {
         </Navbar>
         <main className="px-4 pt-20 pb-10">
           <GridContainer>
-            {/* Background layer */}
-            <BackgroundLayer isFocused={layer === 'background'} />
+            {/* Tile layer */}
+            <TileLayer isFocused={layer === 'tile'} />
 
             {/* Token layer */}
             <TokenLayer isFocused={layer === 'token'} />

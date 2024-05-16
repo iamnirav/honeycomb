@@ -1,8 +1,9 @@
 import { ReactNode, useContext } from 'react'
 import clsx from 'clsx'
+import { Token } from '@/types'
 import Layer from './Layer'
 import { TokenContext } from './TokenContext'
-import Token from './TokenView'
+import TokenView from './TokenView'
 
 interface TokenLayerProps {
   isFocused: boolean
@@ -12,15 +13,12 @@ export default function TokenLayer({ isFocused }: TokenLayerProps) {
   const { tokens } = useContext(TokenContext)
 
   const contents: ReactNode[][] = tokens.reduce(
-    (
-      acc: ReactNode[][],
-      token: { x: number; y: number; imgUrl: string; name: string },
-    ) => {
+    (acc: ReactNode[][], token: Token) => {
       if (token.x !== null && token.y !== null) {
         if (!acc[token.x]) acc[token.x] = []
         acc[token.x][token.y] = (
           <div className="absolute">
-            <Token token={token} />
+            <TokenView token={token} />
           </div>
         )
       }

@@ -6,28 +6,20 @@ import {
   useState,
 } from 'react'
 import db from '@/db'
-
-export interface MapType {
-  id: number
-  name: string
-  uuid: string
-  tiles: string[][]
-}
+import { Map } from '@/types'
 
 interface MapContextType {
-  map: MapType
+  map: Map
   updateTiles: Function
 }
 
 export const MapContext = createContext<MapContextType>({
-  map: { id: -1, name: '', uuid: '', tiles: [] },
+  map: { id: 0, name: '', uuid: '', tiles: [] },
   updateTiles: () => {},
 })
 
-export function MapProvider(props: PropsWithChildren<{ map: MapType }>) {
-  // TODO generate types from db
-  // https://supabase.com/docs/guides/api/rest/generating-types
-  const [map, setMap] = useState<MapType>(props.map)
+export function MapProvider(props: PropsWithChildren<{ map: Map }>) {
+  const [map, setMap] = useState<Map>(props.map)
 
   // Subscribe to map updates
   // TODO change to using supabase broadcast for live updates to ease load on db
@@ -48,7 +40,7 @@ export function MapProvider(props: PropsWithChildren<{ map: MapType }>) {
         (data) => {
           if (!data.errors) {
             if (data.eventType === 'UPDATE' && data.new.id) {
-              setMap(data.new as MapType)
+              setMap(data.new as Map)
             }
           }
         },

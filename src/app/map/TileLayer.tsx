@@ -10,6 +10,6 @@ styles[10][10] = {
   bottom: { borderTopColor: 'rgb(34 197 94)' },
 }
 
-export default function BackgroundLayer({ isFocused }: { isFocused: boolean }) {
-  return <Layer styles={styles} className={clsx('BackgroundLayer')} />
+export default function TileLayer({ isFocused }: { isFocused: boolean }) {
+  return <Layer styles={styles} className={clsx('TileLayer')} />
 }

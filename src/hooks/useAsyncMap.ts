@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { MapType } from '@/app/map/MapContext'
 import db from '@/db'
 import localStorage from '@/localStorage'
-import { Token } from '@/types'
+import { Map, Token } from '@/types'
 
 export default function useAsyncMap(uuid: string) {
   const [result, setResult] = useState<{
-    map: MapType | null
+    map: Map | null
     tokens: Token[]
   }>({
     map: null,

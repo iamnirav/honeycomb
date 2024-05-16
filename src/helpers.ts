@@ -1,6 +1,6 @@
-import { Coords, HasId, HasUuid } from '@/types'
+import { Coords } from '@/types'
 
-export function insertFn<T extends HasUuid>(insertItem: T) {
+export function insertFn<T extends { uuid: string }>(insertItem: T) {
   return (items: T[]) => {
     return [
       ...items.filter((item) => item.uuid !== insertItem.uuid),
@@ -9,15 +9,18 @@ export function insertFn<T extends HasUuid>(insertItem: T) {
   }
 }
 
-export function updateFn<T extends HasId>(updateItem: T) {
+export function updateFn<T extends { uuid: string }>(updateItem: T) {
   return (items: T[]) => {
-    return [...items.filter((item) => item.id !== updateItem.id), updateItem]
+    return [
+      ...items.filter((item) => item.uuid !== updateItem.uuid),
+      updateItem,
+    ]
   }
 }
 
-export function deleteFn<T extends HasId>(deleteItem: T) {
+export function deleteFn<T extends { uuid: string }>(deleteItem: T) {
   return (items: T[]) => {
-    return [...items.filter((item) => item.id !== deleteItem.id)]
+    return [...items.filter((item) => item.uuid !== deleteItem.uuid)]
   }
 }
 

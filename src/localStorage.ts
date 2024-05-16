@@ -1,4 +1,4 @@
-import { Map } from '@/helpers'
+import { Map } from '@/types'
 
 const STORAGE_KEY_MAPS = 'recent-maps'
 

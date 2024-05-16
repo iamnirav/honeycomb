@@ -42,11 +42,7 @@ export default function Bench() {
       {tokens
         .filter((token: any) => token.x === null || token.y === null)
         .map((token: any) => (
-          <Token
-            key={token.id || token.name || token.imgUrl}
-            size="sm"
-            token={token}
-          />
+          <Token key={token.uuid} size="sm" token={token} />
         ))}
       <Token size="sm" className="ml-4" />
     </div>

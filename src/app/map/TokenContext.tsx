@@ -8,14 +8,14 @@ import {
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import db from '@/db'
 import { deleteFn, insertFn, updateFn } from '@/helpers'
-import { Coords, isTypeCoords, isTypeToken, NewToken, Token } from '@/types'
+import { Coords, isTypeCoords, isTypeToken, Token } from '@/types'
 
 interface TokenContextType {
   tokens: Token[]
   insertToken: Function
   updateToken: Function
   deleteToken: Function
-  newToken: NewToken
+  newToken: Token
   setNewTokenCoords: Function
 }
 
@@ -41,7 +41,7 @@ export function TokenProvider(
   // TODO generate types from db
   // https://supabase.com/docs/guides/api/rest/generating-types
   const [tokens, setTokens] = useState<Token[]>(props.tokens)
-  const [newToken, setNewToken] = useState<NewToken>({
+  const [newToken, setNewToken] = useState<Token>({
     x: null,
     y: null,
     name: '',
@@ -78,9 +78,9 @@ export function TokenProvider(
           if (!data.errors) {
             if (data.eventType === 'INSERT') {
               setTokens(insertFn<Token>(data.new as Token))
-            } else if (data.eventType === 'UPDATE' && data.new.id) {
+            } else if (data.eventType === 'UPDATE') {
               setTokens(updateFn<Token>(data.new as Token))
-            } else if (data.eventType === 'DELETE' && data.old.id) {
+            } else if (data.eventType === 'DELETE') {
               setTokens(deleteFn<Token>(data.old as Token))
             }
           }

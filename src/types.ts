@@ -1,26 +1,20 @@
-export interface HasId {
-  id: number
-}
-
-export interface HasUuid {
-  uuid: string
-}
-
 export interface Coords {
   x: number | null
   y: number | null
 }
 
-export interface NewToken extends HasUuid, Coords {
+export interface Token extends Coords {
+  id?: number
   name: string
   imgUrl: string
   ring: number | null
+  uuid: string
 }
 
-export interface Token extends NewToken, HasId {}
-
-export interface Map extends HasId, HasUuid {
+export interface Map {
+  id: number
   name: string
+  uuid: string
   tiles: string[][] | null
 }
 
