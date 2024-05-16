@@ -7,6 +7,7 @@ import {
 } from 'react'
 import db from '@/db'
 import { Map } from '@/types'
+import { HexStyle } from './Hex'
 
 interface MapContextType {
   map: Map
@@ -54,7 +55,7 @@ export function MapProvider(props: PropsWithChildren<{ map: Map }>) {
 
   // Memoize context functions object for the rest of the app to use
   const memoizedMapContext: MapContextType = useMemo(() => {
-    async function updateTiles(tiles: string[][]) {
+    async function updateTiles(tiles: HexStyle[][]) {
       if (map) {
         // Update locally
         setMap({ ...map, tiles })

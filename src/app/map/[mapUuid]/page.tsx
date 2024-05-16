@@ -8,6 +8,7 @@ import {
   NavbarContent,
   useDisclosure,
 } from '@nextui-org/react'
+import db from '@/db'
 import useAsyncMap from '@/hooks/useAsyncMap'
 import Bench from '../Bench'
 import GridContainer from '../GridContainer'
@@ -29,6 +30,24 @@ export default function Map({ params }: MapPageProps) {
   const [brush, setBrush] = useState<BackgroundColor>(null)
 
   if (!map) return
+
+  // async function test() {
+  //   if (!map) return
+  //   const styles: HexStyle[][] = []
+  //   styles[10] = []
+  //   styles[10][10] = {
+  //     top: { borderBottomColor: 'rgb(34 197 94)' },
+  //     middle: { backgroundColor: 'rgb(34 197 94)' },
+  //     bottom: { borderTopColor: 'rgb(34 197 94)' },
+  //   }
+
+  //   await db
+  //     .from('maps')
+  //     .update({
+  //       tiles: styles,
+  //     })
+  //     .eq('id', map.id)
+  // }
 
   return (
     <MapProvider map={map}>

@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react'
+
 export interface Coords {
   x: number | null
   y: number | null
@@ -15,7 +17,13 @@ export interface Map {
   id: number
   name: string
   uuid: string
-  tiles: string[][] | null
+  tiles: HexStyle[][] | null
+}
+
+export interface HexStyle {
+  top: CSSProperties
+  middle: CSSProperties
+  bottom: CSSProperties
 }
 
 export function isTypeCoords(param: unknown): param is Coords {

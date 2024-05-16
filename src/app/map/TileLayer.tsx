@@ -1,15 +1,21 @@
-import clsx from 'clsx'
-import { HexStyle } from './Hex'
-import Layer from './Layer'
+import { useContext } from 'react'
+import Layer, { LayerProps } from './Layer'
+import { MapContext } from './MapContext'
 
-const styles: HexStyle[][] = []
-styles[10] = []
-styles[10][10] = {
-  top: { borderBottomColor: 'rgb(34 197 94)' },
-  middle: { backgroundColor: 'rgb(34 197 94)' },
-  bottom: { borderTopColor: 'rgb(34 197 94)' },
+interface TileLayerProps {
+  isFocused: boolean
 }
 
-export default function TileLayer({ isFocused }: { isFocused: boolean }) {
-  return <Layer styles={styles} className={clsx('TileLayer')} />
+export default function TileLayer({ isFocused }: TileLayerProps) {
+  const { map } = useContext(MapContext)
+
+  const props: LayerProps = {
+    className: 'TileLayer',
+  }
+
+  if (map.tiles) {
+    props.styles = map.tiles
+  }
+
+  return <Layer {...props} />
 }

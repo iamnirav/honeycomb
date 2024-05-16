@@ -1,9 +1,10 @@
 import { ReactNode } from 'react'
 import clsx from 'clsx'
 import { DEFAULT_MAX_X, DEFAULT_MAX_Y } from '@/constants'
-import Hex, { HexStyle } from './Hex'
+import { HexStyle } from '@/types'
+import Hex from './Hex'
 
-interface LayerProps {
+export interface LayerProps {
   className?: string
   contents?: ReactNode[][]
   styles?: HexStyle[][]
@@ -29,12 +30,13 @@ export default function Layer({
       x = x + 2
     ) {
       const children = contents[x] && contents[x][y]
+      // if (!isDroppable) debugger
       hexes.push(
         <Hex
           isDroppable={isDroppable && !children}
           key={x}
           coords={{ x, y }}
-          style={styles[x] && styles[x][y]}
+          style={(styles[x] && styles[x][y]) || undefined}
         >
           {children}
         </Hex>,

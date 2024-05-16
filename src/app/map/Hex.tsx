@@ -1,22 +1,10 @@
-import {
-  CSSProperties,
-  PropsWithChildren,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
 import { coordsMath } from '@/helpers'
-import { Token } from '@/types'
+import { HexStyle, Token } from '@/types'
 import TokenView from './TokenView'
-
-export interface HexStyle {
-  top: CSSProperties
-  middle: CSSProperties
-  bottom: CSSProperties
-}
 
 interface HexProps {
   isDroppable: boolean
