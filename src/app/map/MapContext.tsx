@@ -6,8 +6,8 @@ import {
   useState,
 } from 'react'
 import db from '@/db'
-import { Map } from '@/types'
-import { HexStyle } from './Hex'
+import localStorage from '@/localStorage'
+import { HexStyle, Map } from '@/types'
 
 interface MapContextType {
   map: Map
@@ -27,7 +27,6 @@ export function MapProvider(props: PropsWithChildren<{ map: Map }>) {
   useEffect(() => {
     // Only subscribe once map has been fetched
     if (!map) return
-
     const channel = db.channel('maps-channel')
     channel
       .on(
@@ -36,12 +35,16 @@ export function MapProvider(props: PropsWithChildren<{ map: Map }>) {
           event: '*',
           schema: 'public',
           table: 'maps',
-          filter: `mapId=eq.${map.id}`,
+          filter: `id=eq.${map.id}`,
         },
         (data) => {
           if (!data.errors) {
-            if (data.eventType === 'UPDATE' && data.new.id) {
-              setMap(data.new as Map)
+            if (data.eventType === 'UPDATE') {
+              const newMap = data.new as Map
+              if (map.name !== newMap.name) {
+                updateNonStateMap(newMap)
+              }
+              setMap(newMap)
             }
           }
         },
@@ -79,4 +82,9 @@ export function MapProvider(props: PropsWithChildren<{ map: Map }>) {
       {props.children}
     </MapContext.Provider>
   )
+}
+
+export function updateNonStateMap(map: Map) {
+  document.title = `${map.name} · Honeycomb`
+  localStorage.upsertMap(map)
 }

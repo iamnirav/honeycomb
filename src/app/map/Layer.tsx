@@ -30,7 +30,7 @@ export default function Layer({
       x = x + 2
     ) {
       const children = contents[x] && contents[x][y]
-      // if (!isDroppable) debugger
+
       hexes.push(
         <Hex
           isDroppable={isDroppable && !children}

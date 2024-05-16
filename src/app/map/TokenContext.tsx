@@ -38,8 +38,6 @@ export const TokenContext = createContext<TokenContextType>({
 export function TokenProvider(
   props: PropsWithChildren<{ mapId: number; tokens: Token[] }>,
 ) {
-  // TODO generate types from db
-  // https://supabase.com/docs/guides/api/rest/generating-types
   const [tokens, setTokens] = useState<Token[]>(props.tokens)
   const [newToken, setNewToken] = useState<Token>({
     x: null,

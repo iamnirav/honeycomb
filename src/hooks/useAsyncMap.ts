@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
+import { updateNonStateMap } from '@/app/map/MapContext'
 import db from '@/db'
-import localStorage from '@/localStorage'
 import { Map, Token } from '@/types'
 
 export default function useAsyncMap(uuid: string) {
@@ -30,10 +30,9 @@ export default function useAsyncMap(uuid: string) {
 
       if (!error && data.length) {
         const map = data[0]
-        document.title = `${map.name} · Honeycomb`
         const { id, uuid, name, tiles, tokens } = map
         setResult({ map: { id, uuid, name, tiles }, tokens })
-        localStorage.upsertMap(map)
+        updateNonStateMap(map)
       }
     }
 
