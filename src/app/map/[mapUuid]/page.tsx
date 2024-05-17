@@ -1,18 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  Button,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  useDisclosure,
-} from '@nextui-org/react'
+import { Button, Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react'
 import useAsyncMap from '@/hooks/useAsyncMap'
 import Bench from '../Bench'
 import GridContainer from '../GridContainer'
 import { MapProvider } from '../MapContext'
 import MapModal from '../MapModal'
+import { Menu } from '../Menu'
 import Palette, { BackgroundColor } from '../Palette'
 import TileLayer from '../TileLayer'
 import { TokenProvider } from '../TokenContext'
@@ -24,8 +19,7 @@ interface MapPageProps {
 
 export default function Map({ params }: MapPageProps) {
   const { map, tokens } = useAsyncMap(params.mapUuid)
-  const disclosure = useDisclosure()
-  const [layer, setLayer] = useState<'token' | 'tile'>('tile')
+  const [layer, setLayer] = useState<'token' | 'tile'>('token')
   const [brush, setBrush] = useState<BackgroundColor>()
 
   if (!map) return
@@ -33,19 +27,14 @@ export default function Map({ params }: MapPageProps) {
   return (
     <MapProvider map={map}>
       <TokenProvider mapId={map.id} tokens={tokens}>
-        <Navbar className="fixed">
+        <Navbar className="fixed" isBordered={true}>
           <NavbarBrand className="text-2xl">⬡</NavbarBrand>
           <NavbarContent justify="center">
             {layer === 'token' && <Bench />}
             {layer === 'tile' && <Palette brush={brush} setBrush={setBrush} />}
           </NavbarContent>
           <NavbarContent justify="end">
-            <Button
-              onPress={() => setLayer(layer === 'token' ? 'tile' : 'token')}
-            >
-              Toggle Layer
-            </Button>
-            <Button onPress={disclosure.onOpen}>Maps</Button>
+            <Menu layer={layer} setLayer={setLayer} />
           </NavbarContent>
         </Navbar>
         <main className="px-4 pt-20 pb-10">
@@ -57,7 +46,6 @@ export default function Map({ params }: MapPageProps) {
             <TokenLayer isFocused={layer === 'token'} />
           </GridContainer>
         </main>
-        <MapModal {...disclosure} />
       </TokenProvider>
     </MapProvider>
   )
