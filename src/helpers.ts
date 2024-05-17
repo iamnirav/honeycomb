@@ -1,4 +1,4 @@
-import { Coords } from '@/types'
+import { Coords, HexStyle } from '@/types'
 
 export function insertFn<T extends { uuid: string }>(insertItem: T) {
   return (items: T[]) => {
@@ -76,3 +76,11 @@ export const ADJACENT_VECTORS = [
   { x: -1, y: 1 },
   { x: -2, y: 0 },
 ]
+
+export function createHexStyle(color: string): HexStyle {
+  return {
+    top: { borderBottomColor: color },
+    middle: { backgroundColor: color },
+    bottom: { borderTopColor: color },
+  }
+}

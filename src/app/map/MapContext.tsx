@@ -64,10 +64,7 @@ export function MapProvider(props: PropsWithChildren<{ map: Map }>) {
         setMap({ ...map, tiles })
 
         // Update on server
-        await db
-          .from('maps')
-          .update({ ...map, tiles })
-          .eq('id', map.id)
+        await db.from('maps').update({ tiles }).eq('id', map.id)
       }
     }
 

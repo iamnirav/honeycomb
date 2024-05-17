@@ -1,4 +1,10 @@
-import { PropsWithChildren, useEffect, useRef, useState } from 'react'
+import {
+  MouseEventHandler,
+  PropsWithChildren,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
@@ -10,6 +16,7 @@ interface HexProps {
   isDroppable: boolean
   coords: { x: number; y: number }
   style?: HexStyle
+  onClick?: MouseEventHandler<HTMLDivElement>
 }
 
 interface DragState {
@@ -21,6 +28,7 @@ export default function Hex({
   children,
   isDroppable,
   coords,
+  onClick,
   style = { top: {}, middle: {}, bottom: {} },
 }: PropsWithChildren<HexProps>) {
   const ref = useRef<HTMLDivElement>(null)
@@ -28,6 +36,7 @@ export default function Hex({
     type: 'idle',
   })
 
+  // Set up drop target for tokens
   useEffect(() => {
     const element = ref.current
     invariant(element)
@@ -38,8 +47,10 @@ export default function Hex({
       canDrop({ source }) {
         const {
           data: { token },
-        }: any = source
-        return isDroppable && (!token || !coordsMath.isEqual(coords, token))
+        } = source
+        return (
+          isDroppable && (!token || !coordsMath.isEqual(coords, token as Token))
+        )
       },
       onDragEnter({ source }) {
         setDragState({ type: 'over', data: source.data })
@@ -61,6 +72,9 @@ export default function Hex({
       className={clsx('Hex', {
         DropTarget: dragState.type === 'over',
       })}
+      onClick={onClick}
+      data-x={coords.x}
+      data-y={coords.y}
     >
       <div className="HexTop" style={style.top} />
       <div className="HexMiddle" style={style.middle}>

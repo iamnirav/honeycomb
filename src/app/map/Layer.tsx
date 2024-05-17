@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { MouseEventHandler, ReactNode } from 'react'
 import clsx from 'clsx'
 import { DEFAULT_MAX_X, DEFAULT_MAX_Y } from '@/constants'
 import { HexStyle } from '@/types'
@@ -9,6 +9,7 @@ export interface LayerProps {
   contents?: ReactNode[][]
   styles?: HexStyle[][]
   isDroppable?: boolean
+  onHexClick?: MouseEventHandler<HTMLDivElement>
 }
 
 export default function Layer({
@@ -16,6 +17,7 @@ export default function Layer({
   contents = [],
   styles = [],
   isDroppable = false,
+  onHexClick,
 }: LayerProps) {
   const rows = []
 
@@ -37,6 +39,7 @@ export default function Layer({
           key={x}
           coords={{ x, y }}
           style={(styles[x] && styles[x][y]) || undefined}
+          onClick={onHexClick}
         >
           {children}
         </Hex>,
