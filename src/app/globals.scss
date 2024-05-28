@@ -4,8 +4,8 @@
 
 :root {
   --foreground-rgb: 0 0 0;
-  --background-rgb: 60 60 60;
-  --hex-blank-rgb: 75 75 75;
+  --background-rgb: 50 50 50;
+  --hex-blank-rgb: 60 60 60;
   --hex-side: 26px;
   --hex-dim-long: calc(var(--hex-side) * sqrt(3));
   --hex-spacing: 4px;
@@ -19,8 +19,11 @@
 //   }
 // }
 
+:root {
+  background-color: rgb(var(--background-rgb));
+}
+
 body {
-  background: rgb(var(--background-rgb));
   width: max-content;
   min-width: 100vw;
   min-height: 100vh;
