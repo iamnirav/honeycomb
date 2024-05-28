@@ -1,4 +1,5 @@
 import { Button, ButtonGroup } from '@nextui-org/react'
+import { PaintBrush } from '@phosphor-icons/react'
 
 const BACKGROUND_COLORS = [
   'rgb(115 115 115)',
@@ -24,7 +25,11 @@ export default function Palette({ brush, setBrush }: PaletteProps) {
           style={{ backgroundColor: COLOR }}
           onPress={() => setBrush(COLOR === brush ? undefined : COLOR)}
         >
-          {COLOR === brush ? '✎' : ''}
+          {COLOR === brush ? (
+            <PaintBrush size={18} color="white" weight="duotone" />
+          ) : (
+            ''
+          )}
         </Button>
       ))}
     </ButtonGroup>

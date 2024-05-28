@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { Button, Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react'
+import { Hexagon } from '@phosphor-icons/react'
 import useAsyncMap from '@/hooks/useAsyncMap'
 import Bench from '../Bench'
 import GridContainer from '../GridContainer'
 import { MapProvider } from '../MapContext'
-import MapModal from '../MapModal'
 import { Menu } from '../Menu'
 import Palette, { BackgroundColor } from '../Palette'
 import TileLayer from '../TileLayer'
@@ -28,7 +28,9 @@ export default function Map({ params }: MapPageProps) {
     <MapProvider map={map}>
       <TokenProvider mapId={map.id} tokens={tokens}>
         <Navbar className="fixed" isBordered={true}>
-          <NavbarBrand className="text-2xl">⬡</NavbarBrand>
+          <NavbarBrand>
+            <Hexagon size={30} weight="duotone" />
+          </NavbarBrand>
           <NavbarContent justify="center">
             {layer === 'token' && <Bench />}
             {layer === 'tile' && <Palette brush={brush} setBrush={setBrush} />}

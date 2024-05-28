@@ -8,6 +8,7 @@ import {
   DropdownTrigger,
   useDisclosure,
 } from '@nextui-org/react'
+import { GearSix, Hexagon, LegoSmiley, MapTrifold } from '@phosphor-icons/react'
 import MapModal from './MapModal'
 
 interface MenuProps {
@@ -31,9 +32,11 @@ export function Menu({ layer, setLayer }: MenuProps) {
 
   return (
     <>
-      <Dropdown>
+      <Dropdown backdrop="blur">
         <DropdownTrigger>
-          <Button>Menu</Button>
+          <Button isIconOnly>
+            <GearSix size={30} weight="duotone" />
+          </Button>
         </DropdownTrigger>
         <DropdownMenu
           aria-label="Menu for options and settings"
@@ -42,10 +45,25 @@ export function Menu({ layer, setLayer }: MenuProps) {
           selectedKeys={new Set([layer])}
         >
           <DropdownSection title="LAYERS" showDivider>
-            <DropdownItem key="token">Token</DropdownItem>
-            <DropdownItem key="tile">Tile</DropdownItem>
+            <DropdownItem
+              key="token"
+              startContent={<LegoSmiley size={20} weight="duotone" />}
+            >
+              Token
+            </DropdownItem>
+            <DropdownItem
+              key="tile"
+              startContent={<Hexagon size={20} weight="duotone" />}
+            >
+              Tile
+            </DropdownItem>
           </DropdownSection>
-          <DropdownItem key="maps">Maps&hellip;</DropdownItem>
+          <DropdownItem
+            key="maps"
+            startContent={<MapTrifold size={20} weight="duotone" />}
+          >
+            Maps&hellip;
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
       <MapModal {...disclosure} />

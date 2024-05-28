@@ -3,6 +3,7 @@ import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import { disableNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/disable-native-drag-preview'
 import { preventUnhandled } from '@atlaskit/pragmatic-drag-and-drop/prevent-unhandled'
 import { Avatar, useDisclosure } from '@nextui-org/react'
+import { Plus } from '@phosphor-icons/react'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
 import { getColor, isOnlyEmoji, shortenName } from '@/helpers'
@@ -69,7 +70,8 @@ export default function TokenView({
         src: token.imgUrl,
       }
     : {
-        name: '...',
+        name: '',
+        icon: <Plus size={20} />,
         className: clsx(className, 'cursor-pointer'),
       }
 
