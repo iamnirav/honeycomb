@@ -3,7 +3,7 @@ import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import { disableNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/disable-native-drag-preview'
 import { preventUnhandled } from '@atlaskit/pragmatic-drag-and-drop/prevent-unhandled'
 import { Avatar, useDisclosure } from '@nextui-org/react'
-import { Plus } from '@phosphor-icons/react'
+import { UserCirclePlus } from '@phosphor-icons/react'
 import clsx from 'clsx'
 import invariant from 'tiny-invariant'
 import { getColor, isOnlyEmoji, shortenName } from '@/helpers'
@@ -68,10 +68,11 @@ export default function TokenView({
         getInitials: shortenName,
         name: token.name,
         src: token.imgUrl,
+        isBordered: true,
       }
     : {
         name: '',
-        icon: <Plus size={20} />,
+        icon: <UserCirclePlus size={30} weight="duotone" />,
         className: clsx(className, 'cursor-pointer'),
       }
 
@@ -80,7 +81,6 @@ export default function TokenView({
       <Avatar
         ref={ref}
         {...avatarProps}
-        isBordered
         size={size}
         onClick={disclosure.onOpen}
         imgProps={{
