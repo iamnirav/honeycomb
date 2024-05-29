@@ -1,17 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react'
+import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react'
 import { Hexagon } from '@phosphor-icons/react'
 import useAsyncMap from '@/hooks/useAsyncMap'
 import Bench from '../Bench'
 import GridContainer from '../GridContainer'
 import { MapProvider } from '../MapContext'
-import { Menu } from '../Menu'
+import Menu from '../Menu'
 import Palette, { BackgroundColor } from '../Palette'
 import TileLayer from '../TileLayer'
 import { TokenProvider } from '../TokenContext'
 import TokenLayer from '../TokenLayer'
+import ZoomControls from '../ZoomControls'
 
 interface MapPageProps {
   params: { mapUuid: string }
@@ -36,6 +37,7 @@ export default function Map({ params }: MapPageProps) {
             {layer === 'tile' && <Palette brush={brush} setBrush={setBrush} />}
           </NavbarContent>
           <NavbarContent justify="end">
+            <ZoomControls />
             <Menu layer={layer} setLayer={setLayer} />
           </NavbarContent>
         </Navbar>

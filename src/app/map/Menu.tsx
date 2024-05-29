@@ -16,7 +16,7 @@ interface MenuProps {
   setLayer: Function
 }
 
-export function Menu({ layer, setLayer }: MenuProps) {
+export default function Menu({ layer, setLayer }: MenuProps) {
   const disclosure = useDisclosure()
 
   function handleAction(key: Key) {
