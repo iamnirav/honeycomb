@@ -16,12 +16,6 @@ type TokenViewProps = {
   className?: string
 }
 
-const SIZES = {
-  sm: 'text-xl',
-  md: 'text-2xl',
-  lg: 'text-3xl',
-}
-
 export default function TokenView({
   token,
   size = 'lg',
@@ -58,9 +52,10 @@ export default function TokenView({
     ? {
         className: clsx(
           {
-            [SIZES[size]]: isOnlyEmoji(token.name.split(' ')[0]),
+            'emoji-name': isOnlyEmoji(token.name.split(' ')[0]),
             'opacity-25': isDragging,
           },
+          'TokenView',
           'cursor-pointer',
           className,
         ),
@@ -73,7 +68,7 @@ export default function TokenView({
     : {
         name: '',
         icon: <UserCirclePlus size={30} weight="duotone" />,
-        className: clsx(className, 'cursor-pointer'),
+        className: clsx('TokenView', 'cursor-pointer', className),
       }
 
   return (

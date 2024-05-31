@@ -66,6 +66,16 @@ body {
 }
 
 .TokenLayer {
+  .Hex .TokenView {
+    width: calc(var(--zoom) * 5rem + 1rem);
+    height: calc(var(--zoom) * 5rem + 1rem);
+    font-size: calc(var(--zoom) * 1.8rem + 0.25rem);
+
+    &.emoji-name {
+      font-size: calc(var(--zoom) * 2.5rem + 1rem);
+    }
+  }
+
   .Hex.DropTarget {
     .HexTop {
       border-bottom-color: rgba(255, 255, 255, 0.25);
@@ -102,10 +112,6 @@ body {
       border-top-color: rgba(255, 255, 0, 0.25);
     }
   }
-}
-
-.GridLayer {
-  padding-bottom: var(--hex-side);
 }
 
 .HexRow {
