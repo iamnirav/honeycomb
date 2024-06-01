@@ -9,14 +9,7 @@ export function insertFn<T extends { uuid: string }>(insertItem: T) {
   }
 }
 
-export function updateFn<T extends { uuid: string }>(updateItem: T) {
-  return (items: T[]) => {
-    return [
-      ...items.filter((item) => item.uuid !== updateItem.uuid),
-      updateItem,
-    ]
-  }
-}
+export const updateFn = insertFn
 
 export function deleteFn<T extends { uuid: string }>(deleteItem: T) {
   return (items: T[]) => {
